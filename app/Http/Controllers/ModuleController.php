@@ -2,63 +2,91 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Module;
+use App\Models\Course; // <-- Panggil Course
 use Illuminate\Http\Request;
 
 class ModuleController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Tampilkan daftar Modul.
      */
     public function index()
     {
-        //
+        $modules = Module::with('course')->get(); // Ambil relasi course-nya
+        return view('admin.modules.index', compact('modules'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Tampilkan formulir tambah Modul.
      */
     public function create()
     {
-        //
+        // Kirim daftar Kursus untuk dropdown
+        $courses = Course::all();
+        return view('admin.modules.create', compact('courses'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Simpan Modul baru.
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'course_id' => 'required|exists:courses,id',
+            'content' => 'required|string',
+            'video_url' => 'nullable|url',
+            'sequence' => 'required|integer'
+        ]);
+
+        Module::create($request->all());
+
+        return redirect()->route('modules.index')->with('success', 'Modul berhasil ditambahkan.');
     }
 
     /**
-     * Display the specified resource.
+     * Tampilkan detail Modul (Siswa akan pakai ini)
      */
-    public function show(string $id)
+    public function show(Module $module)
     {
-        //
+        // Ini untuk halaman baca modul oleh siswa
+        return view('student.modules.show', compact('module'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Tampilkan formulir edit Modul.
      */
-    public function edit(string $id)
+    public function edit(Module $module)
     {
-        //
+        $courses = Course::all();
+        return view('admin.modules.edit', compact('module', 'courses'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update Modul.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Module $module)
     {
-        //
+         $request->validate([
+            'title' => 'required|string|max:255',
+            'course_id' => 'required|exists:courses,id',
+            'content' => 'required|string',
+            'video_url' => 'nullable|url',
+            'sequence' => 'required|integer'
+        ]);
+
+        $module->update($request->all());
+
+        return redirect()->route('modules.index')->with('success', 'Modul berhasil diperbarui.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Hapus Modul.
      */
-    public function destroy(string $id)
+    public function destroy(Module $module)
     {
-        //
+        $module->delete();
+        return redirect()->route('modules.index')->with('success', 'Modul berhasil dihapus.');
     }
 }

@@ -2,63 +2,84 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Tampilkan daftar Kursus.
      */
     public function index()
     {
-        //
+        $courses = Course::all();
+        return view('admin.courses.index', compact('courses'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Tampilkan formulir tambah Kursus.
      */
     public function create()
     {
-        //
+        return view('admin.courses.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Simpan Kursus baru.
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        Course::create($request->all());
+
+        return redirect()->route('courses.index')->with('success', 'Kursus berhasil ditambahkan.');
     }
 
     /**
-     * Display the specified resource.
+     * Tampilkan detail Kursus (Bisa dilewati)
      */
-    public function show(string $id)
+    public function show(Course $course)
     {
         //
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Tampilkan formulir edit Kursus.
      */
-    public function edit(string $id)
+    public function edit(Course $course)
     {
-        //
+        return view('admin.courses.edit', compact('course'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update Kursus.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Course $course)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $course->update($request->all());
+
+        return redirect()->route('courses.index')->with('success', 'Kursus berhasil diperbarui.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Hapus Kursus.
      */
-    public function destroy(string $id)
+    public function destroy(Course $course)
     {
-        //
+        // Hati-hati: Jika kursus ini punya modul, mungkin akan error (Foreign Key constraint)
+        // Kita bisa tambahkan logika: "Hapus semua modulnya dulu, baru hapus kursusnya"
+        // $course->modules()->delete(); // Hapus semua modul di dalam kursus ini
+        
+        $course->delete();
+        return redirect()->route('courses.index')->with('success', 'Kursus berhasil dihapus.');
     }
 }
