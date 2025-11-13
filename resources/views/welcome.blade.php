@@ -758,10 +758,10 @@
         </div>
         <div class="container">
             <div class="hero-content">
-                <h1>Kuasa Pemrograman C dengan Bimbingan Ahli</h1>
-                <p>CodeC Master adalah platform bimbingan belajar khusus untuk pemrograman C. Dari dasar hingga tingkat lanjut, kami siap membantu Anda menguasai bahasa pemrograman yang powerful ini.</p>
+                <h1>Pelajari Teorinya, Taklukkan Soalnya.</h1>
+                <p>CodeC Master adalah platform belajar mandiri terlengkap untuk Pemrograman C. Kuasai C dari dasar hingga tingkat lanjut melalui materi terstruktur dan bank soal dinamis yang menguji pemahaman Anda secara langsung.</p>
                 <div class="hero-buttons">
-                    <a href="#pricing" class="cta-button">Mulai Belajar</a>
+                    <a href="{{ route('login') }}" class="cta-button">Mulai Belajar</a>
                     <a href="#features" class="secondary-button">Pelajari Lebih Lanjut</a>
                 </div>
             </div>

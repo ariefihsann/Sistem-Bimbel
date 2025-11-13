@@ -1,22 +1,17 @@
-@extends('layouts.admin')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Dashboard') }}
+        </h2>
+    </x-slot>
 
-@section('content')
-
-<div class="app-content-header">
-    <div class="container-fluid">
-        <h3 class="mb-0">Dashboard</h3>
-    </div>
-</div>
-
-<div class="app-content">
-    <div class="container-fluid">
-        <div class="card">
-            <div class="card-body">
-                <h3>Tes Berhasil!</h3>
-                <p>Layout master dan view anak sudah terhubung.</p>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    {{ __("You're logged in!") }}
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-@endsection
+</x-app-layout>
