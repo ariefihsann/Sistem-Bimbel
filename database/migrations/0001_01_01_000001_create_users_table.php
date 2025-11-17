@@ -17,7 +17,7 @@ return new class extends Migration
             // --- PERBAIKAN: Menambahkan Foreign Key untuk Role ---
             // role_id akan terhubung ke tabel 'roles'
             // default(2) berasumsi id 1 = Admin, id 2 = Siswa (Siswa sebagai role default)
-            $table->foreignId('role_id')->constrained('roles')->default(2); 
+            $table->foreignId('role_id')->constrained('roles')->default(2);
             // -----------------------------------------------------
 
             $table->string('name');
