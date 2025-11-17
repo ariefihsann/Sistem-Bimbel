@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('role_id')->nullable()->after('id')->constrained()->onDelete('set null');
-        });
+        // Schema::table('users', function (Blueprint $table) {
+        //     $table->foreignId('role_id')->nullable()->after('id')->constrained()->onDelete('set null');
+        // });
     }
 
     /**
@@ -22,7 +22,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // Hapus foreign key terlebih dahulu sebelum menghapus kolom
             $table->dropForeign(['role_id']);
             $table->dropColumn('role_id');
         });
