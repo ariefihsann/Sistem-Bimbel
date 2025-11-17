@@ -741,7 +741,7 @@
                     <a href="#testimonials">Testimoni</a>
                     <a href="#contact">Kontak</a>
                 </div>
-                <a href="#pricing" class="cta-button">Daftar Sekarang</a>
+                <a href="{{ route('login') }}" class="cta-button">Daftar Sekarang</a>
                 <div class="mobile-menu">
                     <i class="fas fa-bars"></i>
                 </div>
@@ -787,8 +787,8 @@
                     <div class="feature-icon">
                         <i class="fas fa-chalkboard-teacher"></i>
                     </div>
-                    <h3>Pengajar Berpengalaman</h3>
-                    <p>Dibimbing oleh instruktur yang telah bertahun-tahun berkecimpung dalam industri pemrograman.</p>
+                    <h3>Materi dari Praktisi</h3>
+                    <p>Seluruh materi dan soal disusun oleh para profesional yang aktif berkecimpung di industri pemrograman.</p>
                 </div>
                 <div class="feature-card fade-in">
                     <div class="feature-icon">
@@ -801,8 +801,8 @@
                     <div class="feature-icon">
                         <i class="fas fa-comments"></i>
                     </div>
-                    <h3>Konsultasi 1-on-1</h3>
-                    <p>Sesi tanya jawab langsung dengan mentor untuk membahas kesulitan yang dihadapi.</p>
+                    <h3>Sesi Bantuan Personal</h3>
+                    <p>Sesi tanya jawab privat dengan asisten ahli untuk membedah dan memecahkan masalah kode Anda.</p>
                 </div>
                 <div class="feature-card fade-in">
                     <div class="feature-icon">
@@ -826,49 +826,434 @@
     <section class="pricing" id="pricing">
         <div class="container">
             <div class="section-title">
-                <h2>Pilih Paket Belajar Anda</h2>
-                <p>Kami menawarkan berbagai paket belajar yang dapat disesuaikan dengan kebutuhan dan anggaran Anda</p>
+                <h2>Pilih Level Belajar Anda</h2>
+                <p>Mulai perjalanan coding Anda dengan kurikulum terstruktur dari dasar hingga mahir</p>
             </div>
-            <div class="pricing-grid">
-                <div class="pricing-card fade-in">
+
+            <!-- Code Typing Animation -->
+            <div class="code-typing-container">
+                <div class="code-terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="terminal-title">code_master.c</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="code-line">
+                            <span class="prompt">$</span>
+                            <span id="typed-text" class="typed-text"></span>
+                            <span class="cursor">|</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Level Cards -->
+            <div class="level-cards">
+                <div class="level-card">
+                    <div class="level-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
                     <h3>Pemula</h3>
-                    <div class="price">Rp 299.000<span>/bulan</span></div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> Kurikulum Dasar C</li>
-                        <li><i class="fas fa-check"></i> Video Pembelajaran</li>
-                        <li><i class="fas fa-check"></i> Latihan Coding Dasar</li>
-                        <li><i class="fas fa-check"></i> Forum Diskusi</li>
-                        <li><i class="fas fa-check"></i> Dukungan Email</li>
-                    </ul>
-                    <a href="#" class="cta-button">Pilih Paket</a>
+                    <div class="level-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Dasar Pemrograman C</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Struktur Data Sederhana</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Latihan Coding Interaktif</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Forum Diskusi</span>
+                        </div>
+                    </div>
+                    <button class="level-select-btn">
+                        Mulai Belajar
+                    </button>
                 </div>
-                <div class="pricing-card popular fade-in">
-                    <div class="popular-tag">Paling Populer</div>
+
+                <div class="level-card popular">
+                    <div class="popular-badge">Paling Populer</div>
+                    <div class="level-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
                     <h3>Menengah</h3>
-                    <div class="price">Rp 499.000<span>/bulan</span></div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> Semua fitur Paket Pemula</li>
-                        <li><i class="fas fa-check"></i> Kurikulum Menengah C</li>
-                        <li><i class="fas fa-check"></i> Project Coding</li>
-                        <li><i class="fas fa-check"></i> Konsultasi Grup</li>
-                        <li><i class="fas fa-check"></i> Code Review</li>
-                    </ul>
-                    <a href="#" class="cta-button">Pilih Paket</a>
+                    <div class="level-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Semua Fitur Level Pemula</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Struktur Data Kompleks</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Project Real-world</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Code Review</span>
+                        </div>
+                    </div>
+                    <button class="level-select-btn">
+                        Mulai Belajar
+                    </button>
                 </div>
-                <div class="pricing-card fade-in">
+
+                <div class="level-card">
+                    <div class="level-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
                     <h3>Lanjutan</h3>
-                    <div class="price">Rp 799.000<span>/bulan</span></div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> Semua fitur Paket Menengah</li>
-                        <li><i class="fas fa-check"></i> Kurikulum Lanjutan C</li>
-                        <li><i class="fas fa-check"></i> Konsultasi 1-on-1</li>
-                        <li><i class="fas fa-check"></i> Project Komprehensif</li>
-                        <li><i class="fas fa-check"></i> Sertifikat Penyelesaian</li>
-                    </ul>
-                    <a href="#" class="cta-button">Pilih Paket</a>
+                    <div class="level-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Semua Fitur Level Menengah</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Algoritma Kompleks</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Konsultasi 1-on-1</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Sertifikat Penyelesaian</span>
+                        </div>
+                    </div>
+                    <button class="level-select-btn">
+                        Mulai Belajar
+                    </button>
                 </div>
             </div>
         </div>
+
+        <style>
+            .pricing {
+                padding: 100px 0;
+                background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            }
+
+            .code-typing-container {
+                max-width: 600px;
+                margin: 0 auto 60px;
+            }
+
+            .code-terminal {
+                background: #1a1b26;
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            }
+
+            .terminal-header {
+                background: #2a2b3a;
+                padding: 15px 20px;
+                display: flex;
+                align-items: center;
+                border-bottom: 1px solid #3a3b4a;
+            }
+
+            .terminal-dots {
+                display: flex;
+                gap: 8px;
+                margin-right: 15px;
+            }
+
+            .dot {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+            }
+
+            .dot.red {
+                background: #ff5f57;
+            }
+
+            .dot.yellow {
+                background: #ffbd2e;
+            }
+
+            .dot.green {
+                background: #28c940;
+            }
+
+            .terminal-title {
+                color: #a9b1d6;
+                font-family: 'Courier New', monospace;
+                font-size: 0.9rem;
+            }
+
+            .terminal-body {
+                padding: 30px;
+                font-family: 'Courier New', monospace;
+                min-height: 120px;
+                display: flex;
+                align-items: center;
+            }
+
+            .code-line {
+                display: flex;
+                align-items: center;
+                font-size: 1.1rem;
+            }
+
+            .prompt {
+                color: #bb9af7;
+                margin-right: 10px;
+                font-weight: bold;
+            }
+
+            .typed-text {
+                color: #9aa5ce;
+            }
+
+            .cursor {
+                color: #7dcfff;
+                font-weight: bold;
+                animation: blink 1s infinite;
+                margin-left: 2px;
+            }
+
+            .level-cards {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 30px;
+                margin-top: 30px;
+            }
+
+            .level-card {
+                background: white;
+                border-radius: 15px;
+                padding: 30px;
+                text-align: center;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                transition: all 0.3s ease;
+                position: relative;
+                border: 2px solid transparent;
+            }
+
+            .level-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            }
+
+            .level-card.popular {
+                border-color: #3182CE;
+                transform: scale(1.05);
+            }
+
+            .level-card.popular:hover {
+                transform: scale(1.05) translateY(-10px);
+            }
+
+            .popular-badge {
+                position: absolute;
+                top: -12px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #3182CE;
+                color: white;
+                padding: 5px 20px;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                font-weight: 600;
+            }
+
+            .level-icon {
+                width: 70px;
+                height: 70px;
+                background: linear-gradient(135deg, #3182CE 0%, #2C5AA0 100%);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 20px;
+                font-size: 1.5rem;
+                color: white;
+            }
+
+            .level-card h3 {
+                font-size: 1.4rem;
+                margin-bottom: 20px;
+                color: #2D3748;
+            }
+
+            .level-features {
+                margin-bottom: 25px;
+            }
+
+            .feature-item {
+                display: flex;
+                align-items: center;
+                margin-bottom: 12px;
+                color: #4A5568;
+                text-align: left;
+            }
+
+            .feature-item i {
+                color: #38A169;
+                margin-right: 10px;
+                min-width: 16px;
+            }
+
+            .level-select-btn {
+                background: linear-gradient(135deg, #3182CE 0%, #2C5AA0 100%);
+                color: white;
+                border: none;
+                padding: 12px 30px;
+                border-radius: 25px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                width: 100%;
+                font-size: 0.95rem;
+            }
+
+            .level-select-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(49, 130, 206, 0.4);
+            }
+
+            @keyframes blink {
+
+                0%,
+                100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .level-cards {
+                    grid-template-columns: 1fr;
+                }
+
+                .level-card.popular {
+                    transform: scale(1);
+                }
+
+                .level-card.popular:hover {
+                    transform: translateY(-10px);
+                }
+
+                .code-terminal {
+                    margin: 0 -20px;
+                    border-radius: 0;
+                }
+            }
+        </style>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const codeSnippets = [
+                    'printf("Selamat datang di CodeC Master!\\n");',
+                    'printf("Pilih level belajar Anda...\\n");',
+                    'printf("Mulai journey coding Anda!\\n");',
+                    'printf("Master C programming dengan ahli!\\n");',
+                    'printf("Dari dasar hingga mahir...\\n");',
+                    'printf("Bergabung dengan komunitas developer!\\n");'
+                ];
+
+                const typedTextElement = document.getElementById('typed-text');
+                let currentSnippet = 0;
+                let currentChar = 0;
+                let isDeleting = false;
+                let isPaused = false;
+
+                function type() {
+                    const currentText = codeSnippets[currentSnippet];
+
+                    if (isDeleting) {
+                        // Backspace effect - menghapus karakter satu per satu
+                        typedTextElement.textContent = currentText.substring(0, currentChar - 1);
+                        currentChar--;
+
+                        // Jika sudah menghapus semua, lanjut ke snippet berikutnya
+                        if (currentChar === 0) {
+                            isDeleting = false;
+                            currentSnippet = (currentSnippet + 1) % codeSnippets.length;
+                            isPaused = true;
+
+                            // Tunggu sebentar sebelum mulai mengetik lagi
+                            setTimeout(() => {
+                                isPaused = false;
+                            }, 800);
+                        }
+                    } else {
+                        // Typing effect - mengetik karakter satu per satu
+                        typedTextElement.textContent = currentText.substring(0, currentChar + 1);
+                        currentChar++;
+
+                        // Jika sudah selesai mengetik, tunggu lalu mulai hapus
+                        if (currentChar === currentText.length) {
+                            isPaused = true;
+
+                            // Tunggu sebentar sebelum mulai menghapus
+                            setTimeout(() => {
+                                isPaused = false;
+                                isDeleting = true;
+                            }, 1500);
+                        }
+                    }
+
+                    // Atur kecepatan typing/backspace
+                    const typingSpeed = isDeleting ? 40 : 80; // Backspace lebih cepat
+                    setTimeout(type, typingSpeed);
+                }
+
+                // Start typing animation setelah delay awal
+                setTimeout(type, 1000);
+
+                // Interaksi ketika klik tombol level
+                const levelButtons = document.querySelectorAll('.level-select-btn');
+                levelButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const level = this.closest('.level-card').querySelector('h3').textContent;
+                        const messages = {
+                            'Pemula': 'printf("Memulai level Pemula...\\n");',
+                            'Menengah': 'printf("Loading level Menengah...\\n");',
+                            'Lanjutan': 'printf("Initializing level Lanjutan...\\n");'
+                        };
+
+                        // Simpan state saat ini
+                        const originalSnippet = codeSnippets[currentSnippet];
+                        const originalChar = currentChar;
+                        const originalDeleting = isDeleting;
+                        const originalPaused = isPaused;
+
+                        // Ganti dengan pesan khusus level
+                        codeSnippets[currentSnippet] = messages[level];
+                        currentChar = 0;
+                        isDeleting = false;
+                        isPaused = false;
+
+                        // Reset ke state semula setelah 3 detik
+                        setTimeout(() => {
+                            codeSnippets[currentSnippet] = originalSnippet;
+                            currentChar = originalChar;
+                            isDeleting = originalDeleting;
+                            isPaused = originalPaused;
+                        }, 3000);
+                    });
+                });
+            });
+        </script>
     </section>
 
     <!-- Testimonials Section -->
