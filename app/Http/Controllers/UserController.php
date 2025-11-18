@@ -14,11 +14,30 @@ class UserController extends Controller
      */
     public function index()
     {
-        // Ambil users, dan ambil juga relasi 'role'-nya agar efisien
-        $users = User::with('role')->get(); 
-        
-        return view('admin.users.index', compact('users'));
+        $user = auth()->user();
+
+        // Ambil semua module + jumlah materi
+        $modules = Module::withCount('materi')->get()
+            ->map(function ($module) use ($user) {
+
+                // Hitung materi yang sudah selesai (pivot module_user)
+                $completed = $user->modules()
+                    ->where('module_id', $module->id)
+                    ->wherePivot('status', 1)
+                    ->count();
+
+                $progress = $module->materi_count > 0
+                    ? round(($completed / $module->materi_count) * 100)
+                    : 0;
+
+                $module->progress = $progress;
+
+                return $module;
+            });
+
+        return view('dashboard', compact('modules'));
     }
+
 
     /**
      * Tampilkan formulir tambah User.
@@ -109,9 +128,6 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         // Tambahkan proteksi agar tidak bisa hapus diri sendiri (opsional)
-        if ($user->id == auth()->id()) {
-            return back()->with('error', 'Anda tidak bisa menghapus akun Anda sendiri.');
-        }
 
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');

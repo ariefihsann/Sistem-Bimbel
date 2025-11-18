@@ -26,4 +26,9 @@ class Module extends Model
     {
         return $this->hasMany(StudentProgress::class);
     }
+
+    public function materi()
+    {
+        return $this->hasMany(Materi::class, 'module_id');
+    }
 }
