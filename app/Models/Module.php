@@ -27,6 +27,13 @@ class Module extends Model
         return $this->hasMany(StudentProgress::class);
     }
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class)
+            ->withPivot('status');
+    }
+
+
     public function materi()
     {
         return $this->hasMany(Materi::class, 'module_id');

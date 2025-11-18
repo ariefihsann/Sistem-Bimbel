@@ -599,6 +599,139 @@
             box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
         }
 
+
+        .page-title {
+            color: #3c8dbc;
+            font-weight: 600;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #3c8dbc;
+            padding-bottom: 10px;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border-left: 4px solid #3c8dbc;
+        }
+
+        .course-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .course-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #3c8dbc, #367fa9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: white;
+            font-size: 28px;
+        }
+
+        .course-content {
+            flex: 1;
+        }
+
+        .course-content h6 {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #3c8dbc;
+            font-size: 18px;
+            line-height: 1.4;
+        }
+
+        .course-content p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .progress {
+            height: 8px;
+            background-color: #f4f4f4;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            border-radius: 4px;
+            background: linear-gradient(to right, #00a65a, #3c8dbc);
+        }
+
+        .course-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #3c8dbc;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .text-muted {
+            font-size: 13px;
+            color: #999 !important;
+        }
+
+        .card-footer {
+            background-color: #f9f9f9;
+            border-top: 1px solid #eee;
+            padding: 12px 20px;
+            margin-top: 15px;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .info-box {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-box-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            background: #3c8dbc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .info-box-content {
+            padding-left: 15px;
+        }
+
+        .info-box-text {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .info-box-number {
+            font-size: 24px;
+            font-weight: 600;
+            color: #3c8dbc;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .profile-card {
@@ -759,151 +892,48 @@
             <!-- Left Column -->
             <div class="col-lg-8">
                 <!-- New Courses -->
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-book-open mr-2"></i> Materi Pemrograman C</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            @foreach($modules as $module)
-                            <div class="col-md-6 col-lg-3 mb-4">
-                                <div class="course-card" onclick="navigateTo('{{ $module->id }}')">
+                <div class="row">
+                    @foreach ($modules as $module)
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="course-card" onclick="navigateTo('{{ $module->id }}')">
 
-                                    <!-- Gambar default -->
-                                    <div class="course-icon">
-                                        <i class="fas fa-book"></i>
-                                    </div>
-
-                                    <div class="course-content">
-                                        <h6>{{ $module->title }}</h6>
-
-                                        <p class="mb-2">{{ $module->materi_count }} Materi</p>
-
-
-                                        @php
-                                        $progress = $module->progress_percentage ?? 0;
-
-                                        if ($progress == 0) {
-                                        $status = 'Belum dimulai';
-                                        } elseif ($progress == 100) {
-                                        $status = 'Selesai';
-                                        } else {
-                                        $status = 'Sedang berjalan';
-                                        }
-                                        @endphp
-
-                                        <div class="progress mb-2">
-                                            <div class="progress-bar bg-success" style="width: {{ $progress }}%"></div>
-                                        </div>
-
-                                        <small class="text-muted">{{ $status }}</small>
-
-                                    </div>
-
-                                    <div class="course-badge beginner">Pemula</div>
-                                </div>
+                            <!-- Ikon -->
+                            <div class="course-icon">
+                                <i class="fas fa-laptop-code"></i>
                             </div>
-                            @endforeach
 
+                            <div class="course-content">
+                                <h6>{{ $module->title }}</h6>
+
+                                <!-- Progress x/y -->
+                                <p class="mb-2">{{ $module->completed_text }} problems completed</p>
+
+                                <!-- Progress bar -->
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-success"
+                                        style="width: {{ $module->progress_percentage }}%">
+                                    </div>
+                                </div>
+
+                                <!-- Status -->
+                                <small class="text-muted">{{ $module->status_text }}</small>
+                            </div>
+
+                            <div class="card-footer">
+                                <small class="text-muted">
+                                    <i class="fas fa-user-graduate mr-1"></i> Belajar dengan penuh semangat!
+                                </small>
+                            </div>
+
+                            <div class="course-badge beginner">Pemula</div>
                         </div>
                     </div>
+                    @endforeach
                 </div>
+
 
                 <!-- My Courses Table -->
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">My Courses</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Course name</th>
-                                        <th>Start</th>
-                                        <th>Rate</th>
-                                        <th> Level</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <strong>Web Design</strong>
-                                            <div class="text-muted small">10 lessons</div>
-                                        </td>
-                                        <td>May 12</td>
-                                        <td>
-                                            <span class="text-warning">
-                                                <i class="fas fa-star"></i> 4.8
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-level badge-elementary">Elementary</span>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <strong>Development Basics</strong>
-                                            <div class="text-muted small">8 lessons</div>
-                                        </td>
-                                        <td>May 14</td>
-                                        <td>
-                                            <span class="text-warning">
-                                                <i class="fas fa-star"></i> 4.4
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-level badge-intermediate">Intermediate</span>
-                                        </td>
-                                        <td>
 
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <strong>Data with Python</strong>
-                                            <div class="text-muted small">5 lessons</div>
-                                        </td>
-                                        <td>May 17</td>
-                                        <td>
-                                            <span class="text-warning">
-                                                <i class="fas fa-star"></i> 4.6
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-level badge-intermediate">Intermediate</span>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <strong>HTML Basics</strong>
-                                            <div class="text-muted small">12 lessons</div>
-                                        </td>
-                                        <td>May 26</td>
-                                        <td>
-                                            <span class="text-warning">
-                                                <i class="fas fa-star"></i> 4.7
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-level badge-elementary">Elementary</span>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- Right Column -->
@@ -968,129 +998,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Homework Progress -->
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Homework Progress</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-4">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>CSS Styling</span>
-                                <span>50%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-info" style="width: 50%"></div>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Programming Basics</span>
-                                <span>65%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-success" style="width: 65%"></div>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Java Programming</span>
-                                <span>25%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-warning" style="width: 25%"></div>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Data Structures</span>
-                                <span>40%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-primary" style="width: 40%"></div>
-                            </div>
-                        </div>
-                        <div class="mb-0">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Web Development</span>
-                                <span>75%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-danger" style="width: 75%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Calendar Widget -->
-                <div class="card">
-                    <div class="card-body">
-                        <div class="calendar-header">
-                            <h6 class="mb-0">June 2023</h6>
-                            <div>
-                                <button class="btn btn-sm btn-outline-secondary me-1"><i class="fas fa-chevron-left"></i></button>
-                                <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-chevron-right"></i></button>
-                            </div>
-                        </div>
-                        <div class="calendar-days">
-                            <div class="fw-bold text-muted small">S</div>
-                            <div class="fw-bold text-muted small">M</div>
-                            <div class="fw-bold text-muted small">T</div>
-                            <div class="fw-bold text-muted small">W</div>
-                            <div class="fw-bold text-muted small">T</div>
-                            <div class="fw-bold text-muted small">F</div>
-                            <div class="fw-bold text-muted small">S</div>
-                        </div>
-                        <div class="calendar-days">
-                            <div class="calendar-date empty"></div>
-                            <div class="calendar-date empty"></div>
-                            <div class="calendar-date empty"></div>
-                            <div class="calendar-date">1</div>
-                            <div class="calendar-date">2</div>
-                            <div class="calendar-date">3</div>
-                            <div class="calendar-date">4</div>
-                        </div>
-                        <div class="calendar-days">
-                            <div class="calendar-date">5</div>
-                            <div class="calendar-date">6</div>
-                            <div class="calendar-date">7</div>
-                            <div class="calendar-date">8</div>
-                            <div class="calendar-date">9</div>
-                            <div class="calendar-date">10</div>
-                            <div class="calendar-date">11</div>
-                        </div>
-                        <div class="calendar-days">
-                            <div class="calendar-date">12</div>
-                            <div class="calendar-date">13</div>
-                            <div class="calendar-date">14</div>
-                            <div class="calendar-date">15</div>
-                            <div class="calendar-date">16</div>
-                            <div class="calendar-date">17</div>
-                            <div class="calendar-date">18</div>
-                        </div>
-                        <div class="calendar-days">
-                            <div class="calendar-date">19</div>
-                            <div class="calendar-date">20</div>
-                            <div class="calendar-date active">21</div>
-                            <div class="calendar-date">22</div>
-                            <div class="calendar-date">23</div>
-                            <div class="calendar-date">24</div>
-                            <div class="calendar-date">25</div>
-                        </div>
-                        <div class="calendar-days">
-                            <div class="calendar-date">26</div>
-                            <div class="calendar-date">27</div>
-                            <div class="calendar-date">28</div>
-                            <div class="calendar-date">29</div>
-                            <div class="calendar-date">30</div>
-                            <div class="calendar-date empty"></div>
-                            <div class="calendar-date empty"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- User Profile Card -->
-
             </div>
         </div>
     </div>
@@ -1140,6 +1047,10 @@
             card.setAttribute('tabindex', '0');
             card.setAttribute('role', 'button');
         });
+
+        function navigateTo(moduleId) {
+            alert('Navigasi ke modul dengan ID: ' + moduleId);
+        }
     </script>
 </body>
 

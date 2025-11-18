@@ -1,11 +1,9 @@
 <?php
 
-
-
 namespace App\Http\Controllers;
 
-use App\Models\Module;
 use Illuminate\Http\Request;
+use App\Models\Module;
 
 class DashboardController extends Controller
 {
@@ -13,24 +11,34 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
 
-        // Ambil semua module + jumlah materi
-        $modules = Module::withCount('materi')->get()
-            ->map(function ($module) use ($user) {
+        // Ambil semua module + hitung jumlah materi
+        $modules = Module::withCount('materi')->get();
 
-                // Hitung materi yang sudah selesai (pivot module_user)
-                $completed = $user->modules()
-                    ->where('module_id', $module->id)
-                    ->wherePivot('status', 1)
-                    ->count();
+        foreach ($modules as $module) {
+            // total materi
+            $total = $module->materi_count;
 
-                $progress = $module->materi_count > 0
-                    ? round(($completed / $module->materi_count) * 100)
-                    : 0;
+            // jumlah materi yang sudah dikerjakan user
+            $completed = $user->modules()
+                ->where('module_id', $module->id)
+                ->wherePivot('status', 1)
+                ->count();
 
-                $module->progress = $progress;
+            // persentase
+            $module->progress_percentage = $total > 0 ? round(($completed / $total) * 100) : 0;
 
-                return $module;
-            });
+            // status text
+            if ($completed == 0) {
+                $module->status_text = "Belum dimulai";
+            } elseif ($completed < $total) {
+                $module->status_text = "Sedang berjalan";
+            } else {
+                $module->status_text = "Selesai";
+            }
+
+            // tampilkan format "x/y"
+            $module->completed_text = "$completed / $total";
+        }
 
         return view('layouts.admin', compact('modules'));
     }
