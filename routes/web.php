@@ -14,6 +14,11 @@ use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\DashboardController;
 
 
+use App\Http\Controllers\MateriController;
+
+Route::get('/modules/{module}/materi', [MateriController::class, 'index'])
+    ->name('modules.materi');
+
 Route::get('/CodeC', function () {
     return view('welcome');
 });
@@ -21,6 +26,8 @@ Route::get('/CodeC', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
+Route::get('/modules/{id}', [ModuleController::class, 'show'])->name('modules.show');
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

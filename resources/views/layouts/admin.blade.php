@@ -852,18 +852,14 @@
         <div class="top-navbar d-flex justify-content-between align-items-center">
             <h4 class="mb-0">Dashboard</h4>
             <div class="d-flex align-items-center">
-                <div class="input-group me-3">
-                    <input type="text" class="form-control search-box" placeholder="Search...">
-                    <span class="input-group-text bg-transparent border-0">
-                        <i class="fas fa-search"></i>
-                    </span>
-                </div>
                 <div class="dropdown">
                     <a class="dropdown-toggle d-flex align-items-center text-decoration-none" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="user-profile me-2">
-                            <img src="https://ui-avatars.com/api/?name=Admin+User&background=6C63FF&color=fff" alt="User">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=6C63FF&color=fff" alt="User">
+
                         </div>
-                        <span>Admin User</span>
+                        <span>{{ Auth::user()->name }}</span>
+
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
@@ -896,7 +892,6 @@
                     @foreach ($modules as $module)
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="course-card" onclick="navigateTo('{{ $module->id }}')">
-
                             <!-- Ikon -->
                             <div class="course-icon">
                                 <i class="fas fa-laptop-code"></i>
@@ -1006,35 +1001,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        function navigateTo(courseSlug) {
-            // Simulate navigation - in real implementation, this would redirect to the course page
-            console.log(`Navigating to course: ${courseSlug}`);
-
-            // Show loading state
-            const card = event.currentTarget;
-            card.style.opacity = '0.7';
-
-            // In real application, you would use:
-            // window.location.href = `/courses/${courseSlug}`;
-            // or for SPA: router.push(`/courses/${courseSlug}`);
-
-            // For demo purposes, show alert
-            setTimeout(() => {
-                const courseTitles = {
-                    'pengenalan-dasar': 'Pengenalan Pemrograman Dasar',
-                    'variabel-tipedata': 'Variabel & Tipe Data',
-                    'struktur-kontrol': 'Struktur Kontrol',
-                    'fungsi-prosedur': 'Fungsi & Prosedur',
-                    'array-string': 'Array & String',
-                    'pointer-memory': 'Pointer & Memory Management',
-                    'struktur-data': 'Struktur Data',
-                    'file-handling': 'File Handling'
-                };
-
-                alert(`Membuka materi: ${courseTitles[courseSlug]}`);
-                card.style.opacity = '1';
-            }, 500);
+        function navigateTo(moduleId) {
+            window.location.href = `/modules/${moduleId}/materi`;
         }
+
 
         // Add keyboard accessibility
         document.querySelectorAll('.course-card').forEach(card => {
@@ -1047,10 +1017,6 @@
             card.setAttribute('tabindex', '0');
             card.setAttribute('role', 'button');
         });
-
-        function navigateTo(moduleId) {
-            alert('Navigasi ke modul dengan ID: ' + moduleId);
-        }
     </script>
 </body>
 

@@ -48,11 +48,13 @@ class ModuleController extends Controller
     /**
      * Tampilkan detail Modul (Siswa akan pakai ini)
      */
-    public function show(Module $module)
+    public function show($id)
     {
-        // Ini untuk halaman baca modul oleh siswa
-        return view('student.modules.show', compact('module'));
+        $module = Module::with('materis')->findOrFail($id);
+
+        return view('modules.show', compact('module'));
     }
+
 
     /**
      * Tampilkan formulir edit Modul.
@@ -68,7 +70,7 @@ class ModuleController extends Controller
      */
     public function update(Request $request, Module $module)
     {
-         $request->validate([
+        $request->validate([
             'title' => 'required|string|max:255',
             'course_id' => 'required|exists:courses,id',
             'content' => 'required|string',
