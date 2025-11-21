@@ -9,6 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+use App\Models\Module;
+use App\Models\Materi;
+use App\Models\Role;
+use App\Models\Student;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -69,6 +74,13 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Module::class)
             ->withPivot('status')
+            ->withTimestamps();
+    }
+
+    public function completedMateri()
+    {
+        return $this->belongsToMany(Materi::class, 'materi_user', 'user_id', 'materi_id')
+            ->withPivot('status', 'completed_at')
             ->withTimestamps();
     }
 }

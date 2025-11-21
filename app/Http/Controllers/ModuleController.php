@@ -5,17 +5,37 @@ namespace App\Http\Controllers;
 use App\Models\Module;
 use App\Models\Course; // <-- Panggil Course
 use Illuminate\Http\Request;
+use App\Models\MateriUser;
+
 
 class ModuleController extends Controller
 {
     /**
      * Tampilkan daftar Modul.
      */
-    public function index()
+    public function index($id)
     {
-        $modules = Module::with('course')->get(); // Ambil relasi course-nya
-        return view('admin.modules.index', compact('modules'));
+        $module = Module::with('materis')->findOrFail($id);
+
+        $totalMateri = $module->materis->count();
+
+        $completedCount = MateriUser::where('user_id', auth()->id())
+            ->whereIn('materi_id', $module->materis->pluck('id'))
+            ->count();
+
+        $progress = $totalMateri > 0
+            ? round(($completedCount / $totalMateri) * 100)
+            : 0;
+
+        return view('materi.index', compact(
+            'module',
+            'progress',
+            'completedCount',
+            'totalMateri'
+        ));
     }
+
+
 
     /**
      * Tampilkan formulir tambah Modul.
@@ -56,6 +76,10 @@ class ModuleController extends Controller
     }
 
 
+
+
+
+
     /**
      * Tampilkan formulir edit Modul.
      */
@@ -82,6 +106,20 @@ class ModuleController extends Controller
 
         return redirect()->route('modules.index')->with('success', 'Modul berhasil diperbarui.');
     }
+    public function complete($id)
+    {
+        $materi_id = $id;
+
+        MateriUser::updateOrCreate(
+            ['user_id' => auth()->id(), 'materi_id' => $materi_id],
+            ['status' => 'completed', 'completed_at' => now()]
+        );
+
+
+        return back()->with('success', 'Materi telah ditandai selesai!');
+    }
+
+
 
     /**
      * Hapus Modul.

@@ -904,11 +904,10 @@
                                 <p class="mb-2">{{ $module->completed_text }} problems completed</p>
 
                                 <!-- Progress bar -->
-                                <div class="progress mb-2">
-                                    <div class="progress-bar bg-success"
-                                        style="width: {{ $module->progress_percentage }}%">
-                                    </div>
+                                <div class="progress-bar bg-success"
+                                    style="width: {{ intval($module->progress_percentage ?? 0) }}%;">
                                 </div>
+
 
                                 <!-- Status -->
                                 <small class="text-muted">{{ $module->status_text }}</small>
@@ -1001,9 +1000,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        function navigateTo(moduleId) {
-            window.location.href = `/modules/${moduleId}/materi`;
+        function navigateTo(id) {
+            window.location.href = "{{ url('/modul') }}/" + id + "/materi";
         }
+
 
 
         // Add keyboard accessibility
