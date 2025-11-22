@@ -10,7 +10,7 @@
             <ul>
                 @foreach ($modules as $mod)
                 <li>
-                    <a href="{{ route('modules.show', $mod->id) }}">
+                    <a href="{{ route('materi.index', $mod->id) }}">
                         {{ $mod->title }}
                     </a>
                 </li>
@@ -24,8 +24,8 @@
             <ul>
                 @foreach ($module->materis as $m)
                 <li>
-                    <a href="{{ route('materi.show', ['module' => $module->id, 'materi' => $m->id]) }}">
-                        {{ $m->judul }} <!-- gunakan kolom judul -->
+                    <a href="{{ route('materi.show', ['moduleId' => $module->id, 'materiId' => $m->id]) }}">
+                        {{ $m->judul }}
                     </a>
                 </li>
                 @endforeach
