@@ -39,6 +39,9 @@ Route::get('/modules/{id}', [ModuleController::class, 'show'])
 Route::get('/modules/{moduleId}/materi/{materiId}', [MateriController::class, 'show'])
     ->name('materi.show');
 
+Route::get('/modul/{moduleId}/materi', [MateriController::class, 'index'])->name('materi.index');
+Route::get('/modul/{moduleId}/materi/{materiId}', [MateriController::class, 'show'])->name('materi.show');
+
 
 
 Route::get('/materi/{id}', [MateriController::class, 'show'])->name('materi.show');

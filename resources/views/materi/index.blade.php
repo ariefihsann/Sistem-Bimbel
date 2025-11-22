@@ -404,10 +404,10 @@
                 <!-- Container untuk Modul Pemrograman Dasar -->
                 <div class="materi-container active" id="pemrograman-dasar">
                     <div class="materi-content">
-                        <h2>{{ $materi->judul }}</h2>
+                        <h2>{{ $activeMateri->judul }}</h2>
 
                         <div class="materi-content">
-                            {!! $materi->deskripsi !!}
+                            {!! $activeMateri->deskripsi !!}
                         </div>
 
 

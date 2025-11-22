@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Module;
 use App\Models\Materi;
-use App\Models\UserMateriProgress;
 use App\Models\MateriUser;
 
 class MateriController extends Controller
@@ -13,8 +12,8 @@ class MateriController extends Controller
     {
         $module = Module::findOrFail($moduleId);
 
-        $modules = Module::orderBy('order')->get(); // untuk sidebar
-        $materis = $module->materi()->orderBy('order')->get(); // materi sesuai modul
+        $modules = Module::orderBy('order')->get();
+        $materis = $module->materi()->orderBy('order')->get();
 
         $totalMateri = $materis->count();
 
@@ -22,12 +21,17 @@ class MateriController extends Controller
             ->whereIn('materi_id', $materis->pluck('id'))
             ->count();
 
-        $progress = $totalMateri > 0 ? round(($completedCount / $totalMateri) * 100) : 0;
+        $progress = $totalMateri > 0
+            ? round(($completedCount / $totalMateri) * 100)
+            : 0;
+
+        $activeMateri = $materis->first();
 
         return view('materi.index', compact(
             'module',
             'modules',
             'materis',
+            'activeMateri',
             'totalMateri',
             'completedCount',
             'progress'
@@ -37,11 +41,11 @@ class MateriController extends Controller
 
     public function show($moduleId, $materiId)
     {
-        $modules = Module::all(); // sidebar modul
-        $module = Module::with('materi')->findOrFail($moduleId); // modul aktif
-        $materi = Materi::findOrFail($materiId); // materi yang dipilih
+        $modules = Module::all();
+        $module = Module::findOrFail($moduleId);
+        $materi = Materi::findOrFail($materiId);
 
-        return view('modules.show', compact(
+        return view('materi.show', compact(
             'module',
             'modules',
             'materi'
@@ -49,20 +53,19 @@ class MateriController extends Controller
     }
 
 
-
-
     public function complete($id)
     {
-        UserMateriProgress::updateOrCreate(
+        MateriUser::updateOrCreate(
             [
                 'user_id' => auth()->id(),
                 'materi_id' => $id
             ],
             [
-                'is_completed' => true
+                'status' => 'completed',
+                'completed_at' => now(),
             ]
         );
 
-        return back()->with('success', 'Materi telah ditandai selesai!');
+        return back()->with('success', 'Materi selesai!');
     }
 }
