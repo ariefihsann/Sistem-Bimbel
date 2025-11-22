@@ -1,11 +1,13 @@
-<div class="container">
+@extends('layouts.app')
 
+@section('content')
+
+<div class="container">
     <div class="row">
 
         <!-- Sidebar kiri -->
         <div class="col-md-3">
 
-            <!-- Daftar Modul -->
             <h4>Daftar Modul</h4>
             <ul>
                 @foreach ($modules as $mod)
@@ -19,45 +21,87 @@
 
             <hr>
 
-            <!-- Daftar Materi berdasarkan modul -->
             <h4>Daftar Materi</h4>
             <ul>
-                @foreach ($module->materis as $m)
-                <li>
-                    <a href="{{ route('materi.show', ['moduleId' => $module->id, 'materiId' => $m->id]) }}">
+                @foreach ($materis as $m)
+
+                @php
+                $done = auth()->user()->completedMateri->contains($m->id);
+                @endphp
+
+                <li class="{{ $activeMateri->id == $m->id ? 'fw-bold text-primary' : '' }}">
+                    <a href="{{ route('materi.show', [$module->id, $m->id]) }}">
                         {{ $m->judul }}
                     </a>
+                    {!! $done ? "<span class='text-success fw-bold'>✔</span>" : "" !!}
                 </li>
                 @endforeach
             </ul>
 
-        </div>
+            <hr>
 
-        <!-- Konten Kanan -->
-        <div class="col-md-9">
+            <div class="card p-3 shadow-sm">
+                <h5>Progress Modul</h5>
 
-            @if(isset($materi))
+                <div class="d-flex justify-content-between">
+                    <strong>{{ $progress }}%</strong>
+                    <span>{{ $completedCount }}/{{ $totalMateri }} Materi</span>
+                </div>
 
-            <h2 class="materi-title">{{ $materi->judul }}</h2>
+                <div class="progress mt-2">
+                    <div class="progress-bar bg-success"
+                        style="width: {{ $progress }}%">
+                    </div>
+                </div>
 
-            <div class="materi-content">
-                {!! $materi->deskripsi !!}
+                <div class="mt-2 d-flex justify-content-between">
+                    <small>Materi Dikerjakan: {{ $completedCount }}</small>
+                    <small>Materi Tersisa: {{ $totalMateri - $completedCount }}</small>
+                </div>
             </div>
 
-            @if($materi->file)
+        </div>
+
+        <!-- Konten Materi -->
+        <div class="col-md-9">
+
+            <h2 class="materi-title">{{ $activeMateri->judul }}</h2>
+
+            <div class="materi-content">
+                {!! $activeMateri->deskripsi !!}
+            </div>
+
+            @if($activeMateri->file)
             <p>
-                <a href="{{ asset('storage/materi/' . $materi->file) }}" target="_blank">
+                <a href="{{ asset('storage/materi/' . $activeMateri->file) }}" target="_blank">
                     Lihat Lampiran
                 </a>
             </p>
             @endif
 
-            @else
-            <p>Pilih materi untuk melihat isi.</p>
-            @endif
+            <div class="d-flex justify-content-between mt-4">
+
+                @if ($previousMateri)
+                <a href="{{ route('materi.show', [$module->id, $previousMateri->id]) }}"
+                    class="btn btn-outline-primary">
+                    ← Sebelumnya
+                </a>
+                @else
+                <span></span>
+                @endif
+
+                @if ($nextMateri)
+                <a href="{{ route('materi.show', [$module->id, $nextMateri->id]) }}"
+                    class="btn btn-primary">
+                    Selanjutnya →
+                </a>
+                @endif
+
+            </div>
 
         </div>
 
     </div>
-
 </div>
+
+@endsection

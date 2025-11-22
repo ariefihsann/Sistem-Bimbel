@@ -159,6 +159,106 @@
             overflow: hidden;
         }
 
+        .materi-content {
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .materi-header {
+            background: linear-gradient(135deg, #3c8dbc, #367fa9) !important;
+        }
+
+        .materi-title {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .materi-body {
+            min-height: 400px;
+        }
+
+        .materi-description {
+            line-height: 1.7;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .materi-description h3 {
+            color: #3c8dbc;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .materi-description p {
+            margin-bottom: 1rem;
+        }
+
+        .materi-description code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #e83e8c;
+            font-family: 'Courier New', monospace;
+        }
+
+        .materi-description pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .materi-navigation .btn {
+            padding: 12px 20px;
+            border-radius: 8px;
+            min-width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .materi-navigation .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .quick-actions .btn {
+            border-radius: 20px;
+            padding: 6px 15px;
+            font-size: 0.875rem;
+        }
+
+        .progress-section {
+            border-left: 4px solid #3c8dbc;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            padding: 6px 10px;
+        }
+
+        @media (max-width: 768px) {
+            .materi-navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .materi-navigation .btn {
+                min-width: 100%;
+                justify-content: center;
+            }
+
+            .materi-title {
+                font-size: 1.25rem;
+            }
+
+            .quick-actions {
+                flex-wrap: wrap;
+            }
+        }
+
         .progress-fill {
             height: 100%;
             background: linear-gradient(to right, var(--success), var(--info));
@@ -317,17 +417,42 @@
 <body>
     <!-- Header Section -->
     <div class="module-header">
+
+        <!-- Tombol Kembali -->
+        <div class="container mt-3">
+            <a href="{{ route('dashboard') }}" class="btn btn-success mb-3">
+                ← Kembali ke Dashboard
+            </a>
+        </div>
+
+        <!-- Header Modul -->
         <div class="container">
+
+            <!-- Breadcrumb -->
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#"><i class=""></i> CodeC Master</a></li>
-
+                    <li class="breadcrumb-item">
+                        <a href="#"><i class=""></i> CodeC Master</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        {{ $module->title ?? 'Modul' }}
+                    </li>
                 </ol>
             </nav>
-            <h1 class="module-title" id="module-title">Pemrograman Dasar dengan C</h1>
-            <p class="module-subtitle" id="module-description">Belajar pemrograman dasar C dari dasar dengan soal-soal interaktif</p>
+
+            <!-- Judul Modul -->
+            <h1 class="module-title" id="module-title">
+                {{ $module->title ?? 'Pemrograman Dasar dengan C' }}
+            </h1>
+
+            <p class="module-subtitle" id="module-description">
+                {{ $module->deskripsi ?? 'Belajar pemrograman dasar C dari dasar dengan soal-soal interaktif' }}
+            </p>
+
         </div>
+
     </div>
+
 
     <div class="container">
         <div class="row">
@@ -356,8 +481,9 @@
                         $icon = $icons[$index % count($icons)];
                         @endphp
 
-                        <li class="module-list-item {{ isset($materi) && $materi->id == $m->id ? 'active' : '' }}">
-                            <a href="{{ route('materi.show', [$module->id, $m->id]) }}" class="materi-row">
+                        <li class="module-list-item {{ $activeMateri->id == $m->id ? 'active' : '' }}">
+
+                            <a href="{{ route('materi.show', ['moduleId' => $module->id, 'materiId' => $m->id]) }}">
 
                                 <i class="module-list-icon {{ $icon }}"></i>
 
@@ -402,14 +528,85 @@
             <div class="col-lg-9">
 
                 <!-- Container untuk Modul Pemrograman Dasar -->
-                <div class="materi-container active" id="pemrograman-dasar">
-                    <div class="materi-content">
+                <div class="materi-content">
+                    <div class="materi-header bg-primary text-white p-4 rounded-top">
+                        <h2 class="materi-title mb-0">{{ $activeMateri->judul }}</h2>
+                        <div class="materi-meta mt-2">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="fas fa-clock me-1"></i>{{ $activeMateri->durasi }} menit
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-layer-group me-1"></i>{{ $activeMateri->tingkat_kesulitan }}
+                            </span>
+                        </div>
+                    </div>
 
-                        <div class="materi-content">
+                    <div class="materi-body p-4 bg-white rounded-bottom">
+                        <div class="materi-description">
                             {!! $activeMateri->deskripsi !!}
                         </div>
 
+                        <!-- Progress Bar -->
+                        <div class="progress-section mt-4 p-3 bg-light rounded">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted">Progress Materi</span>
+                                <span class="fw-bold text-primary">{{ $progress }}%</span>
+                            </div>
 
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-primary" style="width: {{ $progress }}%"></div>
+                            </div>
+
+                            <small class="text-muted">
+                                {{ $completedCount }} dari {{ $totalMateri }} materi selesai
+                            </small>
+                        </div>
+
+
+                        <!-- Navigation -->
+                        <div class="materi-navigation d-flex justify-content-between align-items-center mt-4 pt-4 border-top">
+                            @if ($previousMateri)
+                            <a href="{{ route('materi.show', [$module->id, $previousMateri->id]) }}"
+                                class="btn btn-outline-primary d-flex align-items-center">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                <div class="text-start">
+                                    <small class="d-block text-muted">Sebelumnya</small>
+                                    <span class="fw-medium">{{ Str::limit($previousMateri->judul, 30) }}</span>
+                                </div>
+                            </a>
+                            @else
+                            <div></div>
+                            @endif
+
+                            @if ($nextMateri)
+                            <a href="{{ route('materi.show', [$module->id, $nextMateri->id]) }}"
+                                class="btn btn-primary d-flex align-items-center">
+                                <div class="text-end">
+                                    <small class="d-block text-white-50">Selanjutnya</small>
+                                    <span class="fw-medium">{{ Str::limit($nextMateri->judul, 30) }}</span>
+                                </div>
+                                <i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                            @else
+                            <a href="{{ route('materi.index', $module->id) }}" class="btn btn-success">
+                                <i class="fas fa-check me-2"></i>Selesaikan Modul
+                            </a>
+
+                            @endif
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="quick-actions d-flex justify-content-center gap-3 mt-4">
+                            <button class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-bookmark me-1"></i> Tandai
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-question-circle me-1"></i> Tanya
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-download me-1"></i> Unduh
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -429,62 +626,6 @@
                                 }
                             });
                     }
-
-                    // Data modul dengan informasi progress
-                    const moduleData = {
-                        'pemrograman-dasar': {
-                            name: 'Pemrograman Dasar dengan C',
-                            description: 'Belajar pemrograman dasar C dari dasar dengan soal-soal interaktif',
-                            totalMateri: 93,
-                            completed: 0
-                        },
-                        'variabel-tipedata': {
-                            name: 'Variabel dan Tipe Data',
-                            description: 'Memahami konsep variabel, tipe data, dan penggunaannya dalam C',
-                            totalMateri: 15,
-                            completed: 0
-                        },
-                        'operator-ekspresi': {
-                            name: 'Operator dan Ekspresi',
-                            description: 'Menguasai berbagai operator dan membangun ekspresi dalam C',
-                            totalMateri: 20,
-                            completed: 0
-                        },
-                        'struktur-kontrol': {
-                            name: 'Struktur Kontrol',
-                            description: 'Mengontrol alur program dengan percabangan dan perulangan',
-                            totalMateri: 25,
-                            completed: 0
-                        },
-                        'array-string': {
-                            name: 'Array dan String',
-                            description: 'Mengelola kumpulan data dengan array dan manipulasi string',
-                            totalMateri: 18,
-                            completed: 0
-                        },
-                        'fungsi-prosedur': {
-                            name: 'Fungsi dan Prosedur',
-                            description: 'Membuat kode modular dengan fungsi dan prosedur',
-                            totalMateri: 15,
-                            completed: 0
-                        }
-                    };
-
-                    function updateProgress(moduleId) {
-                        const module = moduleData[moduleId];
-                        const progressPercent = Math.round((module.completed / module.totalMateri) * 100);
-
-                        document.getElementById('progress-percent').textContent = `${progressPercent}%`;
-                        document.getElementById('progress-count').textContent = `${module.completed}/${module.totalMateri} Materi`;
-                        document.getElementById('progress-fill').style.width = `${progressPercent}%`;
-                        document.getElementById('completed-count').textContent = module.completed;
-                        document.getElementById('remaining-count').textContent = module.totalMateri - module.completed;
-                    }
-
-                    // Initialize with first module
-                    document.addEventListener('DOMContentLoaded', function() {
-                        showModule('pemrograman-dasar');
-                    });
                 </script>
 </body>
 

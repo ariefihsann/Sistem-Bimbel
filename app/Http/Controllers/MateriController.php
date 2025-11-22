@@ -8,13 +8,14 @@ use App\Models\MateriUser;
 
 class MateriController extends Controller
 {
+    // =====================================================================
+    // INDEX — tampilkan daftar materi + materi pertama
+    // =====================================================================
     public function index($moduleId)
     {
-        $module = Module::findOrFail($moduleId);
-        $modules = Module::orderBy('order')->get();
-        $materis = Materi::where('module_id', $moduleId)
-            ->orderBy('order')
-            ->get();
+        $module    = Module::findOrFail($moduleId);
+        $modules   = Module::orderBy('order')->get();
+        $materis   = $module->materis()->orderBy('order')->get();
 
         $user = auth()->user();
 
@@ -27,40 +28,50 @@ class MateriController extends Controller
             ? round(($completedCount / $totalMateri) * 100)
             : 0;
 
-        // ambil materi pertama untuk ditampilkan
+        // Materi pertama
         $activeMateri = $materis->first();
 
-        return view('materi.index', [
-            'module' => $module,
-            'modules' => $modules,
-            'materis' => $materis,
-            'activeMateri' => $activeMateri,
-            'totalMateri' => $totalMateri,
-            'completedCount' => $completedCount,
-            'progress' => $progress
-        ]);
+        // Previous dan next (materi pertama -> previous null)
+        $previousMateri = null;
+        $nextMateri = $materis->skip(1)->first();
+
+        return view('materi.index', compact(
+            'module',
+            'modules',
+            'materis',
+            'activeMateri',
+            'totalMateri',
+            'completedCount',
+            'progress',
+            'previousMateri',
+            'nextMateri'
+        ));
     }
 
 
-
+    // =====================================================================
+    // SHOW — tampilkan materi sesuai id + update progress
+    // =====================================================================
     public function show($moduleId, $materiId)
     {
-        $module = Module::findOrFail($moduleId);
-        $modules = Module::orderBy('order')->get();
+        $module    = Module::findOrFail($moduleId);
+        $modules   = Module::orderBy('order')->get();
+        $materis   = $module->materis()->orderBy('order')->get();
 
-        // Semua materi dalam modul ini
-        $materis = Materi::where('module_id', $moduleId)
-            ->orderBy('order')
-            ->get();
+        // Materi aktif
+        $activeMateri = Materi::where('module_id', $moduleId)
+            ->where('id', $materiId)
+            ->firstOrFail();
 
-        // Materi yang sedang dibuka
-        $materi = Materi::findOrFail($materiId);
+        // Tandai progress selesai
+        MateriUser::firstOrCreate([
+            'user_id'   => auth()->id(),
+            'materi_id' => $activeMateri->id,
+        ]);
 
-        // Hitung progress lagi (agar sama dengan index)
-        $user = auth()->user();
-
+        // Hitung ulang progress
         $totalMateri = $materis->count();
-        $completedCount = $user->completedMateri()
+        $completedCount = auth()->user()->completedMateri()
             ->whereIn('materi_id', $materis->pluck('id'))
             ->count();
 
@@ -68,29 +79,45 @@ class MateriController extends Controller
             ? round(($completedCount / $totalMateri) * 100)
             : 0;
 
-        return view('materi.index', [
-            'module' => $module,
-            'modules' => $modules,
-            'materis' => $materis,
-            'activeMateri' => $materi,   // gunakan ini di view
-            'totalMateri' => $totalMateri,
-            'completedCount' => $completedCount,
-            'progress' => $progress
-        ]);
+        // Previous & Next
+        $previousMateri = Materi::where('module_id', $moduleId)
+            ->where('order', '<', $activeMateri->order)
+            ->orderBy('order', 'desc')
+            ->first();
+
+        $nextMateri = Materi::where('module_id', $moduleId)
+            ->where('order', '>', $activeMateri->order)
+            ->orderBy('order')
+            ->first();
+
+        // TETAP PAKAI index.blade.php (bukan show)
+        return view('materi.index', compact(
+            'module',
+            'modules',
+            'materis',
+            'activeMateri',
+            'totalMateri',
+            'completedCount',
+            'progress',
+            'previousMateri',
+            'nextMateri'
+        ));
     }
 
 
-
+    // =====================================================================
+    // BUTTON COMPLETE (kalau ada)
+    // =====================================================================
     public function complete($id)
     {
         MateriUser::updateOrCreate(
             [
-                'user_id' => auth()->id(),
+                'user_id'   => auth()->id(),
                 'materi_id' => $id
             ],
             [
-                'status' => 'completed',
-                'completed_at' => now(),
+                'status'        => 'completed',
+                'completed_at'  => now(),
             ]
         );
 
