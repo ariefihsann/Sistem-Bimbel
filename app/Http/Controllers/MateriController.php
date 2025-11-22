@@ -37,9 +37,9 @@ class MateriController extends Controller
 
     public function show($moduleId, $materiId)
     {
-        $module = Module::with('materi')->findOrFail($moduleId);
-        $modules = Module::all();
-        $materi = Materi::where('module_id', $moduleId)->findOrFail($materiId);
+        $modules = Module::all(); // sidebar modul
+        $module = Module::with('materi')->findOrFail($moduleId); // modul aktif
+        $materi = Materi::findOrFail($materiId); // materi yang dipilih
 
         return view('modules.show', compact(
             'module',
@@ -47,6 +47,8 @@ class MateriController extends Controller
             'materi'
         ));
     }
+
+
 
 
     public function complete($id)

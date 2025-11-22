@@ -36,6 +36,11 @@ Route::get('/CodeC', function () {
 Route::get('/modules/{id}', [ModuleController::class, 'show'])
     ->name('modules.show');
 
+Route::get('/modules/{moduleId}/materi/{materiId}', [MateriController::class, 'show'])
+    ->name('materi.show');
+
+
+
 Route::get('/materi/{id}', [MateriController::class, 'show'])->name('materi.show');
 
 

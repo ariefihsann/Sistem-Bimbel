@@ -375,6 +375,7 @@
                     </ul>
 
 
+
                 </div>
 
                 <div class="progress-section">
@@ -403,15 +404,12 @@
                 <!-- Container untuk Modul Pemrograman Dasar -->
                 <div class="materi-container active" id="pemrograman-dasar">
                     <div class="materi-content">
-                        @foreach ($materis as $materi)
-                        <div class="materi-content">
-                            <h4 class="materi-title">{{ $materi->judul }}</h4>
+                        <h2>{{ $materi->judul }}</h2>
 
-                            <div class="materi-section">
-                                {!! $materi->deskripsi !!}
-                            </div>
+                        <div class="materi-content">
+                            {!! $materi->deskripsi !!}
                         </div>
-                        @endforeach
+
 
                     </div>
                 </div>
