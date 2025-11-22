@@ -36,10 +36,6 @@ class ModuleController extends Controller
     }
 
 
-
-    /**
-     * Tampilkan formulir tambah Modul.
-     */
     public function create()
     {
         // Kirim daftar Kursus untuk dropdown
@@ -47,9 +43,7 @@ class ModuleController extends Controller
         return view('admin.modules.create', compact('courses'));
     }
 
-    /**
-     * Simpan Modul baru.
-     */
+
     public function store(Request $request)
     {
         $request->validate([
@@ -65,9 +59,7 @@ class ModuleController extends Controller
         return redirect()->route('modules.index')->with('success', 'Modul berhasil ditambahkan.');
     }
 
-    /**
-     * Tampilkan detail Modul (Siswa akan pakai ini)
-     */
+
     public function show($id)
     {
         $module = Module::with('materis')->findOrFail($id);
@@ -76,13 +68,6 @@ class ModuleController extends Controller
     }
 
 
-
-
-
-
-    /**
-     * Tampilkan formulir edit Modul.
-     */
     public function edit(Module $module)
     {
         $courses = Course::all();
@@ -119,11 +104,6 @@ class ModuleController extends Controller
         return back()->with('success', 'Materi telah ditandai selesai!');
     }
 
-
-
-    /**
-     * Hapus Modul.
-     */
     public function destroy(Module $module)
     {
         $module->delete();
