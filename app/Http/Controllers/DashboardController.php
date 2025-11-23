@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Module;
+use App\Models\Materi;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -40,6 +42,16 @@ class DashboardController extends Controller
             $module->completed_text = "$completed / $total";
         }
 
-        return view('layouts.admin', compact('modules'));
+        return view('dashboard', compact('modules'));
+    }
+
+    public function admin()
+    {
+        return view('admin.dashboard', [
+            'totalUsers' => User::count(),
+            'totalModules' => Module::count(),
+            'totalMateri' => Materi::count(),
+            'modules' => Module::all()
+        ]);
     }
 }

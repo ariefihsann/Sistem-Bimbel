@@ -9,33 +9,10 @@ use Illuminate\Support\Facades\Hash; // Penting untuk enkripsi password
 
 class UserController extends Controller
 {
-    /**
-     * Tampilkan daftar User.
-     */
     public function index()
     {
-        $user = auth()->user();
-
-        // Ambil semua module + jumlah materi
-        $modules = Module::withCount('materi')->get()
-            ->map(function ($module) use ($user) {
-
-                // Hitung materi yang sudah selesai (pivot module_user)
-                $completed = $user->modules()
-                    ->where('module_id', $module->id)
-                    ->wherePivot('status', 1)
-                    ->count();
-
-                $progress = $module->materi_count > 0
-                    ? round(($completed / $module->materi_count) * 100)
-                    : 0;
-
-                $module->progress = $progress;
-
-                return $module;
-            });
-
-        return view('dashboard', compact('modules'));
+        $users = User::with('role')->get();
+        return view('admin.users.index', compact('users'));
     }
 
 
@@ -62,7 +39,6 @@ class UserController extends Controller
             'role_id' => 'required|exists:roles,id' // Pastikan role_id ada di tabel roles
         ]);
 
-        // 2. Buat data user
         User::create([
             'name' => $request->name,
             'email' => $request->email,
