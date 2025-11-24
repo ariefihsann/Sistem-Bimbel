@@ -732,6 +732,11 @@
                 color: #3c8dbc;
             }
 
+            .skip-link {
+                display: none !important;
+            }
+
+
             /* Responsive Design */
             @media (max-width: 768px) {
                 .profile-card {
@@ -919,18 +924,25 @@
 
                                         <!-- Action Buttons -->
                                         <td class="text-center">
-                                            <a href="#" class="btn btn-sm btn-primary">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
 
-                                            <a href="#" class="btn btn-sm btn-warning">
+                                            <a href="#"
+                                                class="btn btn-sm btn-warning btn-edit-user"
+                                                data-id="{{ $user->id }}"
+                                                data-name="{{ $user->name }}"
+                                                data-email="{{ $user->email }}"
+                                                data-role="{{ $user->role_id }}"
+                                                data-toggle="modal" data-target="#editUserModal">
                                                 <i class="fas fa-edit"></i>
                                             </a>
 
-                                            <a href="#" class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Delete User?')">
+
+
+                                            <a href="#"
+                                                class="btn btn-sm btn-danger btn-delete-user"
+                                                data-id="{{ $user->id }}">
                                                 <i class="fas fa-trash"></i>
                                             </a>
+
                                         </td>
 
                                     </tr>
@@ -946,18 +958,199 @@
             </div>
 
             <div class="d-flex justify-content-end mt-3">
-                <a href="{{ route('admin.users.create') }}"
-                    class="btn btn-primary rounded-circle shadow"
-                    style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                <button class="btn btn-primary rounded-circle shadow"
+                    data-toggle="modal" data-target="#createUserModal"
+                    style="
+                            width: 50px;
+                            height: 50px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 24px;
+                        ">
                     +
-                </a>
+                </button>
             </div>
 
 
 
 
+            <!-- Modal -->
+            <!-- AdminLTE Create User Modal -->
+            <div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header bg-primary">
+                            <h4 class="modal-title text-white" id="createUserModalLabel">
+                                <i class="fas fa-user-plus me-2"></i> Create New User
+                            </h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+
+                        </div>
+
+                        <!-- Modal Form create -->
+                        <form action="{{ route('admin.users.store') }}" method="POST">
+                            @csrf
+
+                            <div class="modal-body">
+
+                                <!-- Name -->
+                                <div class="form-group">
+                                    <label for="name">Full Name</label>
+                                    <input type="text" name="name" class="form-control" required placeholder="Enter user name">
+                                </div>
+
+                                <!-- Email -->
+                                <div class="form-group mt-2">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" name="email" class="form-control" required placeholder="Enter email">
+                                </div>
+
+                                <!-- Password -->
+                                <div class="form-group mt-2">
+                                    <label for="password">Password</label>
+                                    <input type="password" name="password" class="form-control" required placeholder="Enter password">
+                                </div>
+
+                                <!-- Role -->
+                                <div class="form-group mt-2">
+                                    <label for="role_id">Role</label>
+                                    <select name="role_id" class="form-control" required>
+                                        <option value="1">Admin</option>
+                                        <option value="2">User</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <!-- Modal Footer -->
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                    <i class="fas fa-times me-1"></i> Cancel
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-1"></i> Save User
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit User Modal (AdminLTE Theme) -->
+            <div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+
+                        <!-- HEADER -->
+                        <div class="modal-header bg-warning">
+                            <h4 class="modal-title text-white">
+                                <i class="fas fa-edit mr-2"></i> Edit User
+                            </h4>
+                            <button type="button" class="close text-white" data-dismiss="modal">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+
+                        <!-- FORM -->
+                        <form id="editUserForm" method="POST">
+                            @csrf
+                            @method('PUT')
+
+                            <div class="modal-body">
+
+                                <!-- Name -->
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" id="edit_name" name="name" class="form-control" required>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="form-group mt-2">
+                                    <label>Email</label>
+                                    <input type="email" id="edit_email" name="email" class="form-control" required>
+                                </div>
+
+                                <!-- Role -->
+                                <div class="form-group mt-2">
+                                    <label>Role</label>
+                                    <select id="edit_role" name="role_id" class="form-control">
+                                        <option value="1">Admin</option>
+                                        <option value="2">User</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <!-- FOOTER -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                    Cancel
+                                </button>
+                                <button type="submit" class="btn btn-warning text-white">
+                                    Update User
+                                </button>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+            <form id="deleteUserForm" method="POST" style="display:none;">
+                @csrf
+                @method('DELETE')
+            </form>
+
             <!-- Bootstrap JS -->
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+            <script src="/adminlte/dist/js/adminlte.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+
+            <script>
+                $(document).on('click', '.btn-edit-user', function() {
+
+                    let id = $(this).data('id');
+                    let name = $(this).data('name');
+                    let email = $(this).data('email');
+                    let role = $(this).data('role');
+
+                    // Isi form modal
+                    $('#edit_name').val(name);
+                    $('#edit_email').val(email);
+                    $('#edit_role').val(role);
+
+                    // Set form action
+                    $('#editUserForm').attr('action', '/admin/users/' + id);
+                });
+            </script>
+
+            <script>
+                $(document).on('click', '.btn-delete-user', function(e) {
+                    e.preventDefault();
+
+                    let id = $(this).data('id');
+
+                    if (confirm('Yakin ingin menghapus user ini?')) {
+
+                        // Set form action
+                        $('#deleteUserForm').attr('action', '/admin/users/' + id);
+
+                        // Submit form
+                        $('#deleteUserForm').submit();
+                    }
+                });
+            </script>
+
 
             <script>
                 function navigateTo(id) {

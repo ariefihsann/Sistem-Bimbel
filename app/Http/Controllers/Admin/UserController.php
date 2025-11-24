@@ -32,8 +32,26 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validasi input
+        $request->validate([
+            'name'      => 'required|string|max:255',
+            'email'     => 'required|email|unique:users,email',
+            'password'  => 'required|string|min:6',
+            'role_id'   => 'required|integer',
+        ]);
+
+        // Simpan user
+        User::create([
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'password'  => bcrypt($request->password), // ENKRIPSI PASSWORD
+            'role_id'   => $request->role_id,
+        ]);
+
+        // Redirect kembali ke halaman users
+        return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan!');
     }
+
 
     /**
      * Display the specified resource.
@@ -54,16 +72,35 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name'      => 'required|string|max:255',
+            'email'     => 'required|email|unique:users,email,' . $id,
+            'role_id'   => 'required|integer',
+        ]);
+
+        $user = User::findOrFail($id);
+
+        $user->update([
+            'name'    => $request->name,
+            'email'   => $request->email,
+            'role_id' => $request->role_id,
+        ]);
+
+        return redirect()->route('admin.users.index')->with('success', 'User updated successfully!');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('admin.users.index')
+            ->with('success', 'User berhasil dihapus!');
     }
 }

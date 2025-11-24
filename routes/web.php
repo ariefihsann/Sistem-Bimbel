@@ -10,6 +10,7 @@ use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\ModuleController as AdminModuleController;
 use App\Http\Controllers\Admin\MateriController as AdminMateriController;
+use App\Http\Controllers\Admin\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +53,16 @@ Route::prefix('admin')
         // Materi CRUD
         Route::resource('materi', AdminMateriController::class);
     });
+
+//modal create user
+Route::post('/admin/users/store', [UserController::class, 'store'])->name('admin.users.store');
+
+//modal edit user
+Route::put('/admin/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
+
+//hapus user
+Route::delete('/admin/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
 
 
 
