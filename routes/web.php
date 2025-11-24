@@ -25,16 +25,17 @@ Route::view('/CodeC', 'welcome');
 | USER DASHBOARD (SISWA)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard');
+Route::middleware(['auth', 'not_admin'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
+
 
 /*
 |--------------------------------------------------------------------------
 | ADMIN PANEL
 |--------------------------------------------------------------------------
 */
+
 Route::prefix('admin')
     ->middleware(['auth', 'is_admin'])
     ->name('admin.')       // ← WAJIB! AGAR route('admin.xxx') bisa dipakai
@@ -54,14 +55,14 @@ Route::prefix('admin')
         Route::resource('materi', AdminMateriController::class);
     });
 
-//modal create user
-Route::post('/admin/users/store', [UserController::class, 'store'])->name('admin.users.store');
+// //modal create user
+// Route::post('/admin/users/store', [UserController::class, 'store'])->name('admin.users.store');
 
-//modal edit user
-Route::put('/admin/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
+// //modal edit user
+// Route::put('/admin/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
 
-//hapus user
-Route::delete('/admin/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+// //hapus user
+// Route::delete('/admin/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
 
 
 

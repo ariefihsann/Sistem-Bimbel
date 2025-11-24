@@ -14,8 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // REGISTER CUSTOM MIDDLEWARE
         $middleware->alias([
-            'is_admin' => \App\Http\Middleware\IsAdmin::class,
-        ]);
+    'is_admin' => \App\Http\Middleware\IsAdmin::class,
+    'not_admin' => \App\Http\Middleware\RedirectIfAdmin::class,
+]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

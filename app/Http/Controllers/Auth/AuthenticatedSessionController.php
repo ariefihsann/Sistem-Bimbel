@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace App\Http\Controllers\Auth;
 
@@ -24,11 +24,17 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // proses autentikasi
         $request->authenticate();
-
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        //  CEK ROLE ADMIN
+        if (Auth::user()->role_id == 1) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        //  USER BIASA   : REDIRECT KE DASHBOARD SISWA
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -39,7 +45,6 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/CodeC');
