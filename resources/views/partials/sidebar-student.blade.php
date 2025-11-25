@@ -3,14 +3,14 @@
 
         {{-- Dashboard --}}
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}"
-                href="{{ route('dashboard') }}">
+            <a class="nav-link {{ request()->is('dashboard') || request()->is('admin/dashboard') ? 'active' : '' }}"
+                href="{{ Auth::user()->role_id == 1 ? route('admin.dashboard') : route('dashboard') }}">
                 <i class="fas fa-home"></i>
                 <span>Dashboard</span>
             </a>
         </li>
 
-        {{-- Modul Pembelajaran --}}
+        {{-- Modul Belajar --}}
         <li class="nav-item">
             <a class="nav-link {{ request()->is('modul*') ? 'active' : '' }}"
                 href="{{ url('/modul/1/materi') }}">
@@ -19,7 +19,7 @@
             </a>
         </li>
 
-        {{-- Progress Belajar --}}
+        {{-- Progress (optional) --}}
         <li class="nav-item">
             <a class="nav-link {{ request()->is('progress*') ? 'active' : '' }}"
                 href="#">
@@ -28,7 +28,18 @@
             </a>
         </li>
 
-        {{-- Akun Saya --}}
+        {{-- Admin ONLY: Users --}}
+        @if(Auth::user()->role_id == 1)
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}"
+                href="{{ route('admin.users.index') }}">
+                <i class="fas fa-users"></i>
+                <span>Users</span>
+            </a>
+        </li>
+        @endif
+
+        {{-- Profil --}}
         <li class="nav-item">
             <a class="nav-link {{ request()->is('profile') ? 'active' : '' }}"
                 href="{{ route('profile.edit') }}">

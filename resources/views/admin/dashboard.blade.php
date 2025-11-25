@@ -1,39 +1,10 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.dashboard-layout')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bimbel Master - Dashboard</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #6C63FF;
-            --secondary: #4A5568;
-            --success: #38B2AC;
-            --info: #4299E1;
-            --warning: #ED8936;
-            --danger: #F56565;
-            --light: #F7FAFC;
-            --dark: #2D3748;
-            --sidebar-bg: #2D3748;
-            --sidebar-text: #CBD5E0;
-            --sidebar-active: #6C63FF;
-            --lavender: #B794F4;
-            --light-orange: #FBD38D;
-            --light-blue: #90CDF4;
-            --light-green: #9AE6B4;
-        }
+@section('content')
 
-        * {
-            font-family: 'Poppins', sans-serif;
-        }
+<h1 class="mb-4">Admin Dashboard</h1>
 
+<<<<<<< HEAD
         body {
             background-color: #F5F7FB;
             color: var(--dark);
@@ -1071,3 +1042,29 @@
 
 @include('admin.modules.modal-edit')
 @include('admin.modules.modal-create')
+=======
+<div class="row">
+    <div class="col-md-4">
+        <div class="card p-3 shadow-sm">
+            <h5>Total Users</h5>
+            <h3>{{ $totalUsers }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3 shadow-sm">
+            <h5>Total Modules</h5>
+            <h3>{{ $totalModules }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3 shadow-sm">
+            <h5>Total Materi</h5>
+            <h3>{{ $totalMateri }}</h3>
+        </div>
+    </div>
+</div>
+
+@endsection
+>>>>>>> 25c9f39e13b43444fff59dde1783c87c7bfff2c1

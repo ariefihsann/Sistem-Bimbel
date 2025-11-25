@@ -792,35 +792,16 @@
 
 <body>
     <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h3>Bimbel Master</h3>
-            <p>Learning Management</p>
-        </div>
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h3>Bimbel Master</h3>
+        <p>Learning Management</p>
+    </div>
 
-        <div class="sidebar-menu mt-3">
-            <ul class="nav flex-column">
+    {{-- pakai sidebar student --}}
+    @include('partials.sidebar-student')
+</div>
 
-                {{-- Dashboard --}}
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}"
-                        href="{{ route('admin.dashboard') }}">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-
-                {{-- Data Users --}}
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}"
-                        href="{{ route('admin.users.index') }}">
-
-                        <i class="fas fa-users"></i>
-                        <span>Users</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
 
     </div>
 

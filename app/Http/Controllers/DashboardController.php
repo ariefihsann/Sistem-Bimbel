@@ -46,12 +46,13 @@ class DashboardController extends Controller
     }
 
     public function admin()
-    {
-        return view('admin.dashboard', [
-            'totalUsers' => User::count(),
-            'totalModules' => Module::count(),
-            'totalMateri' => Materi::count(),
-            'modules' => Module::all()
-        ]);
-    }
+{
+    return view('admin.dashboard', [
+        'totalUsers'   => User::count(),
+        'totalModules' => Module::count(),
+        'totalMateri'  => Materi::count(),
+        'modules'      => Module::all()
+    ]);
+}
+
 }
