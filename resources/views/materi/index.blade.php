@@ -530,20 +530,17 @@
                 <!-- Container untuk Modul Pemrograman Dasar -->
                 <div class="materi-content">
                     <div class="materi-header bg-primary text-white p-4 rounded-top">
-                        <h2 class="materi-title mb-0">{{ $activeMateri->judul }}</h2>
-                        <div class="materi-meta mt-2">
-                            <span class="badge bg-light text-dark me-2">
-                                <i class="fas fa-clock me-1"></i>{{ $activeMateri->durasi }} menit
-                            </span>
-                            <span class="badge bg-light text-dark">
-                                <i class="fas fa-layer-group me-1"></i>{{ $activeMateri->tingkat_kesulitan }}
-                            </span>
-                        </div>
+                        <h2 class="materi-title mb-0">
+                            {{ $activeMateri->judul ?? 'Belum ada materi' }}
+                        </h2>
                     </div>
 
                     <div class="materi-body p-4 bg-white rounded-bottom">
                         <div class="materi-description">
-                            {!! $activeMateri->deskripsi !!}
+                            <div class="materi-description">
+                                {!! $activeMateri?->deskripsi ?? '<p class="text-muted">Belum ada materi di modul ini.</p>' !!}
+                            </div>
+
                         </div>
 
                         <!-- Progress Bar -->
@@ -554,7 +551,8 @@
                             </div>
 
                             <div class="progress" style="height: 8px;">
-                                <div class="progress-bar bg-primary" style="width: {{ $progress }}%"></div>
+                                <div class="progress-bar bg-primary" style="width: {{ $progress ?? 0 }}%"></div>
+
                             </div>
 
                             <small class="text-muted">
@@ -564,7 +562,7 @@
 
 
                         <!-- Navigation -->
-                        <div class="materi-navigation d-flex justify-content-between align-items-center mt-4 pt-4 border-top">
+                        <div class=" materi-navigation d-flex justify-content-between align-items-center mt-4 pt-4 border-top">
                             @if ($previousMateri)
                             <a href="{{ route('materi.show', [$module->id, $previousMateri->id]) }}"
                                 class="btn btn-outline-primary d-flex align-items-center">
@@ -589,9 +587,9 @@
                             </a>
                             @else
                             <a href="{{ route('materi.index', $module->id) }}" class="btn btn-success">
+
                                 <i class="fas fa-check me-2"></i>Selesaikan Modul
                             </a>
-
                             @endif
                         </div>
 

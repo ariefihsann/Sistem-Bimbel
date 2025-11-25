@@ -10,13 +10,8 @@ class ModuleController extends Controller
 {
     public function index()
     {
-        $modules = Module::all();
+        $modules = Module::orderBy('order')->get();
         return view('admin.modules.index', compact('modules'));
-    }
-
-    public function create()
-    {
-        return view('admin.modules.create');
     }
 
     public function store(Request $request)
@@ -41,17 +36,12 @@ class ModuleController extends Controller
             'image'       => $imagePath
         ]);
 
-        return redirect()->route('modules.index')
-            ->with('success', 'Module berhasil ditambahkan');
-    }
-
-    public function edit(Module $module)
-    {
-        return view('admin.modules.edit', compact('module'));
+        return redirect()->route('admin.modules.index')->with('success', 'Module berhasil ditambahkan');
     }
 
     public function update(Request $request, Module $module)
     {
+
         $request->validate([
             'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -72,15 +62,12 @@ class ModuleController extends Controller
             'image'       => $imagePath
         ]);
 
-        return redirect()->route('modules.index')
-            ->with('success', 'Module berhasil diperbarui');
+        return redirect()->route('admin.modules.index')->with('success', 'Module berhasil diperbarui');
     }
 
     public function destroy(Module $module)
     {
         $module->delete();
-
-        return redirect()->route('modules.index')
-            ->with('success', 'Module berhasil dihapus');
+        return redirect()->route('admin.modules.index')->with('success', 'Module berhasil dihapus');
     }
 }

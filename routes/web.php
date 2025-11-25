@@ -63,6 +63,10 @@ Route::put('/admin/users/{id}', [UserController::class, 'update'])->name('admin.
 //hapus user
 Route::delete('/admin/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
 
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('modules', App\Http\Controllers\Admin\ModuleController::class);
+});
+
 
 
 

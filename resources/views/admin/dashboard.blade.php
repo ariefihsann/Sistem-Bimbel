@@ -717,6 +717,19 @@
             font-size: 24px;
         }
 
+        .crud-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .course-card {
+            position: relative;
+        }
+
+
         .info-box-content {
             padding-left: 15px;
         }
@@ -866,9 +879,45 @@
             <div class="col-lg-8">
                 <!-- New Courses -->
                 <div class="row">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="mb-0">Modules</h4>
+
+                        @if(auth()->user()->role_id == 1)
+                        <button class="btn btn-primary btn-sm"
+                            data-bs-toggle="modal" data-bs-target="#createModuleModal">
+                            <i class="fas fa-plus"></i> Add Module
+                        </button>
+                        @endif
+                    </div>
+
                     @foreach ($modules as $module)
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="course-card" onclick="navigateTo('{{ $module->id }}')">
+                            @if(auth()->user()->role_id == 1)
+                            <div class="crud-buttons">
+                                <!-- Edit -->
+                                <button class="btn btn-warning btn-sm btn-edit-module"
+                                    onclick="event.stopPropagation()"
+                                    data-id="{{ $module->id }}"
+                                    data-title="{{ $module->title }}"
+                                    data-description="{{ $module->description }}"
+                                    data-order="{{ $module->order }}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editModuleModal">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
+
+                                <button class="btn btn-danger btn-sm btn-delete-module"
+                                    onclick="event.stopPropagation()"
+                                    data-id="{{ $module->id }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+
+
+                            </div>
+                            @endif
+
                             <!-- Ikon -->
                             <div class="course-icon">
                                 <i class="fas fa-laptop-code"></i>
@@ -895,8 +944,6 @@
                                     <i class="fas fa-user-graduate mr-1"></i> Belajar dengan penuh semangat!
                                 </small>
                             </div>
-
-                            <div class="course-badge beginner">Pemula</div>
                         </div>
                     </div>
                     @endforeach
@@ -973,9 +1020,32 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelectorAll('.btn-edit-module, .btn-delete-module').forEach(btn => {
+            btn.addEventListener('click', function(event) {
+                event.stopPropagation();
+            });
+        });
+    </script>
+
+    <script>
+        // edit
+        $('.btn-edit-module').click(function() {
+
+            $('#edit_title').val($(this).data('title'));
+            $('#edit_description').val($(this).data('description'));
+            $('#edit_order').val($(this).data('order'));
+
+            let id = $(this).data('id');
+            $('#editModuleForm').attr('action', '/admin/modules/' + id);
+
+        });
+    </script>
     <script>
         function navigateTo(id) {
             window.location.href = "{{ url('/modul') }}/" + id + "/materi";
@@ -998,3 +1068,6 @@
 </body>
 
 </html>
+
+@include('admin.modules.modal-edit')
+@include('admin.modules.modal-create')
