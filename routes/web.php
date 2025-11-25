@@ -4,13 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MateriController;
-use App\Http\Controllers\ModuleController;
 
 // ADMIN CONTROLLERS
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\ModuleController as AdminModuleController;
 use App\Http\Controllers\Admin\MateriController as AdminMateriController;
-use App\Http\Controllers\Admin\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,46 +27,20 @@ Route::middleware(['auth', 'not_admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
-
 /*
 |--------------------------------------------------------------------------
 | ADMIN PANEL
 |--------------------------------------------------------------------------
 */
-
 Route::prefix('admin')
     ->middleware(['auth', 'is_admin'])
-    ->name('admin.')       // ← WAJIB! AGAR route('admin.xxx') bisa dipakai
+    ->name('admin.')
     ->group(function () {
-
-        // Dashboard Admin
-        Route::get('/dashboard', [DashboardController::class, 'admin'])
-            ->name('dashboard');
-
-        // User CRUD
-        Route::resource('users', AdminUserController::class);
-
-        // Module CRUD
-        Route::resource('modules', AdminModuleController::class);
-
-        // Materi CRUD
-        Route::resource('materi', AdminMateriController::class);
+        Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
+        Route::resource('users', App\Http\Controllers\Admin\UserController::class);
+        Route::resource('modules', App\Http\Controllers\Admin\ModuleController::class);
+        Route::resource('materi', App\Http\Controllers\Admin\MateriController::class);
     });
-
-// //modal create user
-// Route::post('/admin/users/store', [UserController::class, 'store'])->name('admin.users.store');
-
-// //modal edit user
-// Route::put('/admin/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
-
-// //hapus user
-// Route::delete('/admin/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
-
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('modules', App\Http\Controllers\Admin\ModuleController::class);
-});
-
-
 
 
 /*
@@ -76,10 +48,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 | PROGRESS MATERI (SISWA)
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth')->post('/materi/{id}/complete', [
-    MateriController::class,
-    'complete'
-])->name('materi.complete');
+Route::middleware('auth')
+    ->post('/materi/{id}/complete', [MateriController::class, 'complete'])
+    ->name('materi.complete');
 
 /*
 |--------------------------------------------------------------------------
@@ -90,23 +61,19 @@ Route::middleware('auth')
     ->prefix('modul')
     ->group(function () {
 
-        // index modul → tampilkan materi pertama
         Route::get('{moduleId}/materi', [MateriController::class, 'index'])
             ->name('materi.index');
 
-        // tampilkan materi tertentu
         Route::get('{moduleId}/materi/{materiId}', [MateriController::class, 'show'])
             ->name('materi.show');
     });
 
 /*
 |--------------------------------------------------------------------------
-| PROFILE (DEFAULT LARAVEL)
+| PROFILE
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth')->get('/profile', [
-    ProfileController::class,
-    'edit'
-])->name('profile.edit');
+Route::middleware('auth')->get('/profile', [ProfileController::class, 'edit'])
+    ->name('profile.edit');
 
 require __DIR__ . '/auth.php';

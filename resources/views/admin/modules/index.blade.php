@@ -33,7 +33,7 @@
 
                 <div class="d-flex justify-content-end p-2">
 
-                    <!-- EDIT BUTTON -->
+                    <!-- EDIT MODULE -->
                     <button class="btn btn-warning btn-sm btn-edit-module"
                         data-id="{{ $module->id }}"
                         data-title="{{ $module->title }}"
@@ -44,7 +44,7 @@
                         <i class="fas fa-edit"></i>
                     </button>
 
-                    <!-- DELETE BUTTON -->
+                    <!-- DELETE MODULE -->
                     <button class="btn btn-danger btn-sm ms-2 btn-delete-module"
                         data-id="{{ $module->id }}">
                         <i class="fas fa-trash"></i>
@@ -69,10 +69,6 @@
 
 </div>
 
-<!-- IMPORT MODALS -->
-@include('admin.modules.modal-create')
-@include('admin.modules.modal-edit')
-
 <!-- DELETE FORM -->
 <form id="deleteModuleForm" method="POST">
     @csrf
@@ -81,29 +77,32 @@
 
 @endsection
 
-@push('scripts')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+@section('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // Edit Module
-    $('.btn-edit-module').click(function() {
+    // Saat tombol edit diklik
+    $(document).on('click', '.btn-edit-module', function() {
+        let id = $(this).data('id'); // ambil id module
+
+        // isi modal dengan data dari tombol
         $('#edit_title').val($(this).data('title'));
         $('#edit_description').val($(this).data('description'));
         $('#edit_order').val($(this).data('order'));
 
-        let id = $(this).data('id');
+        // ubah action form agar jadi PUT ke /admin/modules/{id}
         $('#editModuleForm').attr('action', '/admin/modules/' + id);
-    });
 
-    // Delete Module
-    $('.btn-delete-module').click(function() {
-        if (confirm('Yakin ingin menghapus modul ini?')) {
-            let id = $(this).data('id');
-            let form = $('#deleteModuleForm');
-
-            form.attr('action', '/admin/modules/' + id);
-            form.submit();
-        }
+        // debug di console
+        console.log('Form action:', $('#editModuleForm').attr('action'));
     });
 </script>
+@endsection
+
+
+
+
+@push('modals')
+@include('admin.modules.modal-edit')
+@include('admin.modules.modal-create')
 @endpush

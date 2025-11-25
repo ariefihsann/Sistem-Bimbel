@@ -786,6 +786,49 @@
             .nav-link i {
                 margin-right: 0;
             }
+
+            /* Fix avatar size */
+            .table-avatar {
+                width: 42px;
+                height: 42px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+            /* Center semua kolom tertentu */
+            #usersTable td,
+            #usersTable th {
+                vertical-align: middle !important;
+            }
+
+            /* Fix kolom ID agar kecil & rapi */
+            #usersTable th:nth-child(1),
+            #usersTable td:nth-child(1) {
+                width: 60px;
+                text-align: center;
+            }
+
+            /* Fix kolom Avatar */
+            #usersTable th:nth-child(2),
+            #usersTable td:nth-child(2) {
+                width: 90px;
+                text-align: center;
+            }
+
+            /* Fix kolom Role */
+            #usersTable th:nth-child(5),
+            #usersTable td:nth-child(5) {
+                width: 100px;
+                text-align: center;
+            }
+
+            /* Fix kolom Actions */
+            #usersTable th:nth-child(8),
+            #usersTable td:nth-child(8) {
+                width: 130px;
+                text-align: center;
+                white-space: nowrap;
+            }
         }
     </style>
 </head>
