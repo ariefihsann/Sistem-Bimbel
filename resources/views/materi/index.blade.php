@@ -454,113 +454,113 @@
     </div>
 
 
-       <div class="container">
+    <div class="container">
 
-    @if(session('success'))
+        @if(session('success'))
         <div class="alert alert-success mt-3">
             {{ session('success') }}
         </div>
-    @endif
+        @endif
 
-    @if($errors->any())
+        @if($errors->any())
         <div class="alert alert-danger mt-3">
             <ul class="mb-0">
                 @foreach($errors->all() as $err)
-                    <li>{{ $err }}</li>
+                <li>{{ $err }}</li>
                 @endforeach
             </ul>
         </div>
-    @endif
+        @endif
 
-    <div class="row">
+        <div class="row">
 
             <!-- Sidebar Modul -->
             <div class="col-lg-3">
-              <div class="sidebar-modules">
-    <h4 class="sidebar-title">Daftar Materi</h4>
+                <div class="sidebar-modules">
+                    <h4 class="sidebar-title">Daftar Materi</h4>
 
-    <ul class="module-list">
+                    <ul class="module-list">
 
-        @php
-        $icons = ['fas fa-book', 'fas fa-book-open', 'fas fa-file-alt', 'fas fa-book-reader'];
-        @endphp
+                        @php
+                        $icons = ['fas fa-book', 'fas fa-book-open', 'fas fa-file-alt', 'fas fa-book-reader'];
+                        @endphp
 
-        @foreach ($materis as $index => $m)
+                        @foreach ($materis as $index => $m)
 
-        @php
-        $done = \App\Models\MateriUser::where('user_id', auth()->id())
-                ->where('materi_id', $m->id)
-                ->exists();
+                        @php
+                        $done = \App\Models\MateriUser::where('user_id', auth()->id())
+                        ->where('materi_id', $m->id)
+                        ->exists();
 
-        $icon = $icons[$index % count($icons)];
-        @endphp
+                        $icon = $icons[$index % count($icons)];
+                        @endphp
 
-        <li class="module-list-item {{ $activeMateri->id == $m->id ? 'active' : '' }}">
-            <a href="{{ route('materi.show', ['moduleId' => $module->id, 'materiId' => $m->id]) }}">
-                <i class="module-list-icon {{ $icon }}"></i>
-                <span class="materi-title">{{ $m->judul }}</span>
-                <span class="materi-progress">{{ $done ? '✓' : '' }}</span>
-            </a>
-        </li>
+                        <li class="module-list-item {{ $activeMateri->id == $m->id ? 'active' : '' }}">
+                            <a href="{{ route('materi.show', ['moduleId' => $module->id, 'materiId' => $m->id]) }}">
+                                <i class="module-list-icon {{ $icon }}"></i>
+                                <span class="materi-title">{{ $m->judul }}</span>
+                                <span class="materi-progress">{{ $done ? '✓' : '' }}</span>
+                            </a>
+                        </li>
 
-        @endforeach
+                        @endforeach
 
-    </ul>
+                    </ul>
 
-    {{-- ====================== ADMIN FORM ====================== --}}
-    @if(auth()->check() && auth()->user()->role_id == 1)
+                    {{-- ====================== ADMIN FORM ====================== --}}
+                    @if(auth()->check() && auth()->user()->role_id == 1)
 
-        <hr>
+                    <hr>
 
-        {{-- FORM TAMBAH --}}
-      <form action="{{ route('admin.materi.store') }}"  method="POST" 
-      enctype="multipart/form-data"
-      class="mt-2">
-    @csrf
-    <input type="hidden" name="module_id" value="{{ $module->id }}">
+                    {{-- FORM TAMBAH --}}
+                    <form action="{{ route('admin.materi.store') }}" method="POST"
+                        enctype="multipart/form-data"
+                        class="mt-2">
+                        @csrf
+                        <input type="hidden" name="module_id" value="{{ $module->id }}">
 
-            <div class="mb-2">
-                <label class="form-label">Judul Materi</label>
-                <input type="text" name="judul" class="form-control form-control-sm" required>
-            </div>
+                        <div class="mb-2">
+                            <label class="form-label">Judul Materi</label>
+                            <input type="text" name="judul" class="form-control form-control-sm" required>
+                        </div>
 
-            <div class="mb-2">
-                <label class="form-label">Deskripsi (HTML)</label>
-                <textarea name="deskripsi" rows="3" class="form-control form-control-sm"></textarea>
-            </div>
+                        <div class="mb-2">
+                            <label class="form-label">Deskripsi (HTML)</label>
+                            <textarea name="deskripsi" rows="3" class="form-control form-control-sm"></textarea>
+                        </div>
 
-            <div class="mb-2">
-                <label class="form-label">File (opsional)</label>
-                <input type="file" name="file" class="form-control form-control-sm">
-            </div>
+                        <div class="mb-2">
+                            <label class="form-label">File (opsional)</label>
+                            <input type="file" name="file" class="form-control form-control-sm">
+                        </div>
 
-            <div class="mb-3">
-                <label class="form-label">Urutan</label>
-                <input type="number" name="order" class="form-control form-control-sm" value="{{ ($materis->max('order') ?? 0) + 1 }}">
-            </div>
+                        <div class="mb-3">
+                            <label class="form-label">Urutan</label>
+                            <input type="number" name="order" class="form-control form-control-sm" value="{{ ($materis->max('order') ?? 0) + 1 }}">
+                        </div>
 
-            <button type="submit" class="btn btn-sm btn-success w-100">
-                <i class="fas fa-plus me-1"></i> Tambah Materi
-            </button>
-        </form>
+                        <button type="submit" class="btn btn-sm btn-success w-100">
+                            <i class="fas fa-plus me-1"></i> Tambah Materi
+                        </button>
+                    </form>
 
-        @if($activeMateri)
-        <form action="{{ route('admin.materi.destroy', $activeMateri->id) }}" method="POST" class="mt-2" onsubmit="return confirm('Yakin ingin menghapus materi ini?');">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-sm btn-outline-danger w-100">
-                <i class="fas fa-trash me-1"></i> Hapus Materi Aktif
-            </button>
-        </form>
-        @endif
+                    @if($activeMateri)
+                    <form action="{{ route('admin.materi.destroy', $activeMateri->id) }}" method="POST" class="mt-2" onsubmit="return confirm('Yakin ingin menghapus materi ini?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-outline-danger w-100">
+                            <i class="fas fa-trash me-1"></i> Hapus Materi Aktif
+                        </button>
+                    </form>
+                    @endif
 
-    @endif
-</div>
-
-
+                    @endif
+                </div>
 
 
-          
+
+
+
                 <div class="progress-section">
                     <h5>Progress Modul</h5>
 
@@ -593,18 +593,18 @@
                     </div>
 
                     <div class="materi-body p-4 bg-white rounded-bottom">
-                            <div class="materi-description">
-                                {!! $activeMateri?->deskripsi ?? '<p class="text-muted">Belum ada materi di modul ini.</p>' !!}
-                            </div>
-                        
-                        @if($activeMateri->file)
-                            <p>
-                                <a href="{{ asset('storage/' . $activeMateri->file) }}" target="_blank">
-                                    Lihat Lampiran
-                                </a>
-                            </p>
+                        <div class="materi-description">
+                            {!! $activeMateri?->deskripsi ?? '<p class="text-muted">Belum ada materi di modul ini.</p>' !!}
+                        </div>
+                        @if($activeMateri && $activeMateri->file)
+                        <p>
+                            <a href="{{ asset('storage/' . $activeMateri->file) }}" target="_blank">
+                                Lihat Lampiran
+                            </a>
+                        </p>
                         @endif
-                                               
+
+
                         <!-- Progress Bar -->
                         <div class="progress-section mt-4 p-3 bg-light rounded">
                             <div class="d-flex justify-content-between align-items-center mb-2">
