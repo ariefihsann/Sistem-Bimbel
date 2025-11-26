@@ -4,26 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
-use App\Models\Module;
-use App\Models\Role;
-use App\Models\Student;
-
 
 class Materi extends Model
 {
     use HasFactory;
 
     protected $table = 'materis';
-    protected $fillable = ['module_id', 'judul', 'konten', 'order'];
 
-    // app/Models/Materi.php
+    protected $fillable = [
+        'module_id',
+        'judul',
+        'deskripsi',
+        'file',
+        'order',
+    ];
+
     public function module()
     {
-        return $this->belongsTo(Module::class);
+        return $this->belongsTo(Module::class, 'module_id', 'id');
     }
-
 
     public function users()
     {

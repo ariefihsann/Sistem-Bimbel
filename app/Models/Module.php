@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Module extends Model
 {
@@ -18,12 +16,12 @@ class Module extends Model
         'image'
     ];
 
-    public function course(): BelongsTo
+    public function course()
     {
         return $this->belongsTo(Course::class);
     }
 
-    public function progress(): HasMany
+    public function progress()
     {
         return $this->hasMany(StudentProgress::class);
     }
@@ -33,27 +31,29 @@ class Module extends Model
         return $this->belongsToMany(User::class)
             ->withPivot('status');
     }
-    // app/Models/Module.php
-    public function materi()
-    {
-        return $this->hasMany(Materi::class, 'module_id');
-    }
 
+    // RELASI YANG BENAR UNTUK MATERI
     public function materis()
     {
-        return $this->hasMany(Materi::class, 'module_id')
+        return $this->hasMany(Materi::class, 'module_id', 'id')
             ->orderBy('order', 'asc');
+    }
+
+    // OPTIONAL - jika kamu butuh nama pendek
+    public function materi()
+    {
+        return $this->materis();
     }
 
     public function getProgressPercentageAttribute()
     {
-        $total = $this->materi()->count();
+        $total = $this->materis()->count();
         if ($total == 0) return 0;
 
         $userId = auth()->id();
 
         $completed = \App\Models\UserMateriProgress::where('user_id', $userId)
-            ->whereIn('materi_id', $this->materi->pluck('id'))
+            ->whereIn('materi_id', $this->materis->pluck('id'))
             ->where('is_completed', true)
             ->count();
 
