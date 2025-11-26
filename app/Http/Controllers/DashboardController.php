@@ -13,41 +13,53 @@ class DashboardController extends Controller
 {
     $user = auth()->user();
 
-    // Ambil module + jumlah materi
+    // 1. Total Courses (jumlah module)
+    $totalCourses = Module::count();
+    
+    $totalMateri = Materi::count();
+
+    // 3. Total Completed Materi oleh user
+  
+    $totalCompleted = \DB::table('materi_user')
+        ->where('user_id', $user->id)
+        ->count();
+
+    // 4. Overall Progress (semua materi)
+
+    $overallProgress = $totalMateri > 0
+        ? round(($totalCompleted / $totalMateri) * 100)
+        : 0;
+
+    // 5. Progress per module 
     $modules = Module::with('materis')->get();
 
     foreach ($modules as $module) {
 
         $total = $module->materis->count();
 
-        // Hitung total materi yang sudah dipelajari user dari tabel materi_user
         $completed = \DB::table('materi_user')
             ->where('user_id', $user->id)
             ->whereIn('materi_id', $module->materis->pluck('id'))
             ->count();
 
-        // hitung persen
-        $module->progress_percentage = $total > 0
-            ? round(($completed / $total) * 100)
-            : 0;
-
-        // status
-        if ($completed == 0) {
-            $module->status_text = "Belum dimulai";
-        } elseif ($completed < $total) {
-            $module->status_text = "Sedang berjalan";
-        } else {
-            $module->status_text = "Selesai";
-        }
-
-        // tampilkan x/y
         $module->completed_text = "$completed / $total";
+
+        $module->progress_percentage =
+            $total > 0 ? round(($completed / $total) * 100) : 0;
+
+        $module->status_text =
+            $completed == 0 ? 'Belum dimulai' :
+            ($completed == $total ? 'Selesai' : 'Sedang berjalan');
     }
 
-    return view('dashboard', compact('modules'));
+
+    return view('dashboard', compact(
+        'modules',
+        'totalCourses',
+        'totalCompleted',
+        'overallProgress'
+    ));
 }
-
-
     public function admin()
 {
     return view('admin.dashboard', [

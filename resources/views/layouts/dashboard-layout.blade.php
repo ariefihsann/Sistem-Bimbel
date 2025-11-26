@@ -911,19 +911,19 @@
                         <div class="profile-stats row text-center">
                             <div class="col-4">
                                 <div class="stat-item">
-                                    <h6 class="stat-number mb-1">12</h6>
+                                    <h6 class="stat-number mb-1">{{ $totalCourses }}</h6>
                                     <small class="stat-label text-muted">Courses</small>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="stat-item">
-                                    <h6 class="stat-number mb-1">24</h6>
+                                    <h6 class="stat-number mb-1">{{ $totalCompleted }}</h6>
                                     <small class="stat-label text-muted">Completed</small>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="stat-item">
-                                    <h6 class="stat-number mb-1">85%</h6>
+                                    <h6 class="stat-number mb-1">{{ $overallProgress }}%</h6>
                                     <small class="stat-label text-muted">Progress</small>
                                 </div>
                             </div>
@@ -933,10 +933,10 @@
                         <div class="progress-container mt-3">
                             <div class="d-flex justify-content-between mb-1">
                                 <small class="text-muted">Overall Progress</small>
-                                <small class="text-muted">85%</small>
+                                <small class="text-muted">{{ $overallProgress }}%</small>
                             </div>
                             <div class="progress" style="height: 6px;">
-                                <div class="progress-bar bg-gradient-primary" style="width: 85%"></div>
+                                <div class="progress-bar bg-gradient-primary" style="width: {{ $overallProgress }}%"></div>
                             </div>
                         </div>
 
