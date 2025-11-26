@@ -11,7 +11,7 @@ class ModuleController extends Controller
     public function index()
     {
         $modules = Module::orderBy('order')->get();
-        return view('admin.modules.index', compact('modules'));
+        return view('admin.dashboard', compact('modules'));
     }
 
     public function store(Request $request)
@@ -36,7 +36,7 @@ class ModuleController extends Controller
             'image'       => $imagePath
         ]);
 
-        return redirect()->route('admin.modules.index')->with('success', 'Module berhasil ditambahkan');
+        return redirect()->route('admin.dashboard')->with('success', 'Module berhasil ditambahkan');
     }
 
     public function update(Request $request, Module $module)
@@ -62,12 +62,13 @@ class ModuleController extends Controller
             'image'       => $imagePath
         ]);
 
-        return redirect()->route('admin.modules.index')->with('success', 'Module berhasil diperbarui');
+        return redirect()->route('admin.dashboard')->with('success', 'Module berhasil diperbarui');
     }
-
-    public function destroy(Module $module)
+    public function destroy($id)
     {
-        $module->delete();
-        return redirect()->route('admin.modules.index')->with('success', 'Module berhasil dihapus');
+        Module::findOrFail($id)->delete();
+
+        return redirect()->route('admin.dashboard')
+            ->with('success', 'Module deleted successfully');
     }
 }

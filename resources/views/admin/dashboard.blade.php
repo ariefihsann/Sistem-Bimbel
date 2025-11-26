@@ -883,25 +883,28 @@
                             @if(auth()->user()->role_id == 1)
                             <div class="crud-buttons">
                                 <!-- Edit -->
-                                <button class="btn btn-warning btn-sm btn-edit-module"
-                                    onclick="event.stopPropagation()"
-                                    data-id="{{ $module->id }}"
-                                    data-title="{{ $module->title }}"
-                                    data-description="{{ $module->description }}"
-                                    data-order="{{ $module->order }}"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#editModuleModal">
-                                    <i class="fas fa-edit"></i>
-                                </button>
+                                <div class="d-flex justify-content-end gap-2 mt-2">
+                                    <!-- Tombol Edit -->
+                                    <button class="btn btn-warning btn-sm btn-edit-module"
+                                        onclick="event.stopPropagation()"
+                                        data-id="{{ $module->id }}"
+                                        data-title="{{ $module->title }}"
+                                        data-description="{{ $module->description }}"
+                                        data-order="{{ $module->order }}"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editModuleModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
 
-
-                                <button class="btn btn-danger btn-sm btn-delete-module"
-                                    onclick="event.stopPropagation()"
-                                    data-id="{{ $module->id }}">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-
-
+                                    <!-- Tombol Delete -->
+                                    <!-- Tombol Delete -->
+                                    <button class="btn btn-danger btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModuleModal"
+                                        onclick="confirmDeleteModule({{ $module->id }}, event)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
                             </div>
                             @endif
 
@@ -1005,56 +1008,46 @@
                 </div>
             </div>
         </div>
+
     </div>
+    @include('admin.modules.modal-edit')
+    @include('admin.modules.modal-create')
+    @include('admin.modules.modal-delete')
 
-
-
-    <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        document.querySelectorAll('.btn-edit-module, .btn-delete-module').forEach(btn => {
-            btn.addEventListener('click', function(event) {
-                event.stopPropagation();
-            });
-        });
+        function confirmDeleteModule(id, event) {
+            // 1. Stop Propagation agar tidak memicu klik pada parent (card/row)
+            event.stopPropagation();
+
+            // 2. Debugging (Cek di Inspect Element -> Console)
+            console.log("Tombol delete diklik untuk ID:", id);
+
+            // 3. Set Action pada Form
+            // Pastikan URL prefix-nya sesuai route kamu ('/admin/modules/' atau lainnya)
+            let url = "{{ url('/admin/modules') }}/" + id;
+            $('#deleteModuleForm').attr('action', url);
+        }
     </script>
 
     <script>
-        // edit
         $('.btn-edit-module').click(function() {
-
             $('#edit_title').val($(this).data('title'));
             $('#edit_description').val($(this).data('description'));
             $('#edit_order').val($(this).data('order'));
 
             let id = $(this).data('id');
             $('#editModuleForm').attr('action', '/admin/modules/' + id);
-
         });
     </script>
+
     <script>
         function navigateTo(id) {
             window.location.href = "{{ url('/modul') }}/" + id + "/materi";
         }
-
-
-
-        // Add keyboard accessibility
-        document.querySelectorAll('.course-card').forEach(card => {
-            card.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    this.click();
-                }
-            });
-
-            card.setAttribute('tabindex', '0');
-            card.setAttribute('role', 'button');
-        });
     </script>
 </body>
 
 </html>
-
-@include('admin.modules.modal-edit')
-@include('admin.modules.modal-create')

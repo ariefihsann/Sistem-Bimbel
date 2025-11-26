@@ -4,7 +4,7 @@
 
             <div class="modal-header bg-primary text-white">
                 <h4 class="modal-title">Tambah Modul</h4>
-                <button class="close text-white" data-dismiss="modal">×</button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <form action="{{ route('admin.modules.store') }}" method="POST" enctype="multipart/form-data">
