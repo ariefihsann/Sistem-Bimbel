@@ -79,8 +79,8 @@ class User extends Authenticatable
 
     public function completedMateri()
     {
-        return $this->belongsToMany(Materi::class, 'materi_user', 'user_id', 'materi_id')
-            ->withPivot('status', 'completed_at')
-            ->withTimestamps();
+        return $this->belongsToMany(Materi::class, 'materi_user', 'user_id', 'materi_id');
     }
+
+    
 }

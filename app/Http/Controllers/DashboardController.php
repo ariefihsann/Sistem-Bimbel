@@ -10,40 +10,43 @@ use App\Models\User;
 class DashboardController extends Controller
 {
     public function index()
-    {
-        $user = auth()->user();
+{
+    $user = auth()->user();
 
-        // Ambil semua module + hitung jumlah materi
-        $modules = Module::withCount('materi')->get();
+    // Ambil module + jumlah materi
+    $modules = Module::with('materis')->get();
 
-        foreach ($modules as $module) {
-            // total materi
-            $total = $module->materi_count;
+    foreach ($modules as $module) {
 
-            // jumlah materi yang sudah dikerjakan user
-            $completed = $user->modules()
-                ->where('module_id', $module->id)
-                ->wherePivot('status', 1)
-                ->count();
+        $total = $module->materis->count();
 
-            // persentase
-            $module->progress_percentage = $total > 0 ? round(($completed / $total) * 100) : 0;
+        // Hitung total materi yang sudah dipelajari user dari tabel materi_user
+        $completed = \DB::table('materi_user')
+            ->where('user_id', $user->id)
+            ->whereIn('materi_id', $module->materis->pluck('id'))
+            ->count();
 
-            // status text
-            if ($completed == 0) {
-                $module->status_text = "Belum dimulai";
-            } elseif ($completed < $total) {
-                $module->status_text = "Sedang berjalan";
-            } else {
-                $module->status_text = "Selesai";
-            }
+        // hitung persen
+        $module->progress_percentage = $total > 0
+            ? round(($completed / $total) * 100)
+            : 0;
 
-            // tampilkan format "x/y"
-            $module->completed_text = "$completed / $total";
+        // status
+        if ($completed == 0) {
+            $module->status_text = "Belum dimulai";
+        } elseif ($completed < $total) {
+            $module->status_text = "Sedang berjalan";
+        } else {
+            $module->status_text = "Selesai";
         }
 
-        return view('dashboard', compact('modules'));
+        // tampilkan x/y
+        $module->completed_text = "$completed / $total";
     }
+
+    return view('dashboard', compact('modules'));
+}
+
 
     public function admin()
 {
