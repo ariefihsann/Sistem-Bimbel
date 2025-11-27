@@ -5,33 +5,18 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MateriController;
 
-// ADMIN CONTROLLERS
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\ModuleController as AdminModuleController;
 use App\Http\Controllers\Admin\MateriController as AdminMateriController;
 
-/*
-|--------------------------------------------------------------------------
-| PUBLIC PAGE
-|--------------------------------------------------------------------------
-*/
 
 Route::view('/CodeC', 'welcome');
 
-/*
-|--------------------------------------------------------------------------
-| USER DASHBOARD (SISWA)
-|--------------------------------------------------------------------------
-*/
+
 Route::middleware(['auth', 'not_admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
-/*
-|--------------------------------------------------------------------------
-| ADMIN PANEL
-|--------------------------------------------------------------------------
-*/
 Route::prefix('admin')
     ->middleware(['auth', 'is_admin'])
     ->name('admin.')
@@ -43,20 +28,10 @@ Route::prefix('admin')
     });
 
 
-/*
-|--------------------------------------------------------------------------
-| PROGRESS MATERI (SISWA)
-|--------------------------------------------------------------------------
-*/
 Route::middleware('auth')
     ->post('/materi/{id}/complete', [MateriController::class, 'complete'])
     ->name('materi.complete');
 
-/*
-|--------------------------------------------------------------------------
-| MODUL & MATERI (SISWA)
-|--------------------------------------------------------------------------
-*/
 Route::middleware('auth')
     ->prefix('modul')
     ->group(function () {
@@ -68,11 +43,6 @@ Route::middleware('auth')
             ->name('materi.show');
     });
 
-/*
-|--------------------------------------------------------------------------
-| PROFILE
-|--------------------------------------------------------------------------
-*/
 Route::middleware('auth')->get('/profile', [ProfileController::class, 'edit'])
     ->name('profile.edit');
 
