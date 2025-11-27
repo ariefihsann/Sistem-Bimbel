@@ -12,10 +12,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 🚀 Panggil RoleSeeder dulu
+        // Panggil RoleSeeder dulu
         $this->call(RoleSeeder::class);
 
-        // 🚀 Baru seed User
+        //Baru seed User
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
