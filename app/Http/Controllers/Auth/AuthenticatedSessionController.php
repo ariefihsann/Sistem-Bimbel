@@ -28,18 +28,13 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
 
-        //  CEK ROLE ADMIN
         if (Auth::user()->role_id == 1) {
             return redirect()->route('admin.dashboard');
         }
 
-        //  USER BIASA   : REDIRECT KE DASHBOARD SISWA
         return redirect()->route('dashboard');
     }
-
-    /**
-     * Destroy an authenticated session.
-     */
+    
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();

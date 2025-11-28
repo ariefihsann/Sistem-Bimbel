@@ -9,9 +9,6 @@ use Illuminate\Support\Facades\Storage;
 
 class MateriController extends Controller
 {
-    /**
-     * Tampilkan semua materi (opsional, bisa dipakai di halaman admin sendiri).
-     */
     public function index()
     {
         $materis = Materi::with('module')
@@ -86,9 +83,7 @@ class MateriController extends Controller
         //
     }
 
-    /**
-     * Hapus materi.
-     */
+
     public function destroy(Materi $materi)
     {
         $moduleId = $materi->module_id;

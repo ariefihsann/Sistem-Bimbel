@@ -13,24 +13,19 @@ class DashboardController extends Controller
 {
     $user = auth()->user();
 
-    // 1. Total Courses (jumlah module)
     $totalCourses = Module::count();
     
     $totalMateri = Materi::count();
-
-    // 3. Total Completed Materi oleh user
   
     $totalCompleted = \DB::table('materi_user')
         ->where('user_id', $user->id)
         ->count();
 
-    // 4. Overall Progress (semua materi)
-
     $overallProgress = $totalMateri > 0
         ? round(($totalCompleted / $totalMateri) * 100)
         : 0;
 
-    // 5. Progress per module 
+    // Progress per module 
     $modules = Module::with('materis')->get();
 
     foreach ($modules as $module) {

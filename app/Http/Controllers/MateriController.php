@@ -8,9 +8,7 @@ use App\Models\MateriUser;
 
 class MateriController extends Controller
 {
-    // =====================================================================
-    // INDEX — tampilkan daftar materi + materi pertama
-    // =====================================================================
+   
     public function index($moduleId)
     {
         $module    = Module::findOrFail($moduleId);
@@ -48,10 +46,6 @@ class MateriController extends Controller
         ));
     }
 
-
-    // =====================================================================
-    // SHOW — tampilkan materi sesuai id + update progress
-    // =====================================================================
     public function show($moduleId, $materiId)
     {
         $module    = Module::findOrFail($moduleId);
@@ -90,7 +84,6 @@ class MateriController extends Controller
             ->orderBy('order')
             ->first();
 
-        // TETAP PAKAI index.blade.php (bukan show)
         return view('materi.index', compact(
             'module',
             'modules',
@@ -104,10 +97,6 @@ class MateriController extends Controller
         ));
     }
 
-
-    // =====================================================================
-    // BUTTON COMPLETE (kalau ada)
-    // =====================================================================
     public function complete($id)
     {
         MateriUser::updateOrCreate(

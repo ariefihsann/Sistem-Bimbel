@@ -912,13 +912,13 @@
                             <div class="col-4">
                                 <div class="stat-item">
                                     <h6 class="stat-number mb-1">{{ $totalCourses }}</h6>
-                                    <small class="stat-label text-muted">Courses</small>
+                                    <small class="stat-label text-muted">Modul</small>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="stat-item">
                                     <h6 class="stat-number mb-1">{{ $totalCompleted }}</h6>
-                                    <small class="stat-label text-muted">Completed</small>
+                                    <small class="stat-label text-muted">materi Completed</small>
                                 </div>
                             </div>
                             <div class="col-4">
